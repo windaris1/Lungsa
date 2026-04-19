@@ -50,24 +50,43 @@ body {
   display: flex; 
   overflow-x: auto; 
   gap: 8px; 
-  padding: 10px 40px; /* Kasih space buat tombol */
+  padding: 10px 40px;
   scroll-behavior: smooth;
+  align-items: center; /* INI PENTING BIAR RATA TENGAH */
 }
 .league-bar::-webkit-scrollbar { display: none; }
 .league-item { 
-  flex: 0 0 auto; 
+  flex: 0 0 auto; /* BIAR GA MELAR FULL WIDTH */
   background: var(--bg); 
   border: 1px solid var(--border); 
-  padding: 8px 16px; 
+  padding: 8px 14px; 
   border-radius: 8px; 
   font-size: 13px; 
   font-weight: 700; 
   cursor: pointer; 
-  white-space: nowrap; 
+  white-space: nowrap;
+  height: 36px; /* SAMAIN TINGGINYA */
+  display: flex; /* BIAR ISI RATA TENGAH */
+  align-items: center;
+  gap: 6px;
 }
 .league-item.active { background: var(--blue); border-color: var(--blue); }
-.league-item .badge { background: var(--red); color: #fff; font-size: 10px; padding: 1px 5px; border-radius: 10px; margin-left: 4px; }
-.league-item .dot { width: 8px; height: 8px; background: var(--red); border-radius: 50%; display: inline-block; margin-right: 6px; }
+.league-item .badge { 
+  background: var(--red); 
+  color: #fff; 
+  font-size: 10px; 
+  padding: 1px 5px; 
+  border-radius: 10px; 
+  line-height: 1;
+}
+.league-item .dot { 
+  width: 8px; 
+  height: 8px; 
+  background: var(--red); 
+  border-radius: 50%; 
+  display: inline-block;
+  flex-shrink: 0;
+}
 
 /* TOMBOL KIRI KANAN */
 .scroll-btn {
