@@ -178,6 +178,29 @@ function sendChat() {
 sendBtn.onclick = sendChat;
 chatInput.onkeydown = (e) => { if (e.key === 'Enter') sendChat(); };
 
+// SCROLL LEAGUE BAR PAKE TOMBOL
+const scrollLeftBtn = document.getElementById('scrollLeft');
+const scrollRightBtn = document.getElementById('scrollRight');
+const scrollAmount = 200; // Jarak scroll tiap klik
+
+function updateScrollButtons() {
+  scrollLeftBtn.disabled = leagueBar.scrollLeft <= 0;
+  scrollRightBtn.disabled = leagueBar.scrollLeft >= leagueBar.scrollWidth - leagueBar.clientWidth - 1;
+}
+
+scrollLeftBtn.onclick = () => {
+  leagueBar.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+};
+scrollRightBtn.onclick = () => {
+  leagueBar.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+};
+
+leagueBar.addEventListener('scroll', updateScrollButtons);
+// Panggil sekali pas load
+setTimeout(updateScrollButtons, 100);
+
+
+
 // Init
 renderLeagueBar();
 openPopup('LIVE');
