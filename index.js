@@ -1,89 +1,90 @@
+// 1. DATA MATCH - INI WAJIB ADA & PALING ATAS
+const MATCHES = [
+  {
+    "id": "ManCity-Arsenal",
+    "league": "LIGA PRIMER",
+    "team1": { "name": "Manchester City", "logo": "https://static.flashscore.com/res/image/data/UXcqj7HG-lQuhqN8N.png" },
+    "team2": { "name": "Arsenal", "logo": "https://static.flashscore.com/res/image/data/pfchdCg5-vcNAdtF9.png" },
+    "kickoff_date": "2026-04-19", "kickoff_time": "22:30",
+    "stream_url": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+  },
+  {
+    "id": "Persik-Persita",
+    "league": "SUPER LEAGUE",
+    "team1": { "name": "Persik Kediri", "logo": "https://static.flashscore.com/res/image/data/IgemUgg5-fudV7NWp.png" },
+    "team2": { "name": "Persita", "logo": "https://static.flashscore.com/res/image/data/IefKuzwS-Mw6HAN8i.png" },
+    "kickoff_date": "2026-04-19", "kickoff_time": "15:30",
+    "stream_url": "https://test-streams.mux.dev/test_001/stream.m3u8"
+  },
+  {
+    "id": "Bayern-Stuttgart",
+    "league": "BUNDESLIGA",
+    "team1": { "name": "Bayern Munich", "logo": "https://static.flashscore.com/res/image/data/tMir8iCr-SvLFaVNH.png" },
+    "team2": { "name": "VfB Stuttgart", "logo": "https://static.flashscore.com/res/image/data/V1Lp3Nud-fsqKqjR9.png" },
+    "kickoff_date": "2026-04-19", "kickoff_time": "22:30",
+    "stream_url": ""
+  }
+];
+
+// 2. AMBIL SEMUA ELEMENT
 const video = document.getElementById('video');
 const leagueBar = document.getElementById('leagueBar');
 const scoreboard = document.getElementById('scoreboard');
-const chatInput = document.getElementById('chatInput');
-const chatBox = document.getElementById('chatBox');
-const sendBtn = document.getElementById('sendBtn');
 const popupOverlay = document.getElementById('popupOverlay');
 const matchPopup = document.getElementById('matchPopup');
 const popupTitle = document.getElementById('popupTitle');
 const popupList = document.getElementById('popupList');
 const popupClose = document.getElementById('popupClose');
+const scrollLeftBtn = document.getElementById('scrollLeft');
+const scrollRightBtn = document.getElementById('scrollRight');
+const prevBtn = document.getElementById('prevMatch');
+const nextBtn = document.getElementById('nextMatch');
+let hls = null, activeLeague = 'LIVE', currentMatchIndex = -1;
 
-// TARO DATA LANGSUNG DI SINI BIAR GA ERROR
-const MATCHES = [
-  {
-    "id": "Persik-Persita",
-    "league": "Super League",
-    "team1": { "name": "Persik Kediri", "logo": "https://static.flashscore.com/res/image/data/IgemUgg5-fudV7NWp.png" },
-    "team2": { "name": "Persita", "logo": "https://static.flashscore.com/res/image/data/IefKuzwS-Mw6HAN8i.png" },
-    "kickoff_date": "2026-04-19", "kickoff_time": "15:30",
-    "stream_url": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
-  },
-  {
-    "id": "ManCity-Arsenal",
-    "league": "Liga Primer",
-    "team1": { "name": "Manchester City", "logo": "https://static.flashscore.com/res/image/data/UXcqj7HG-lQuhqN8N.png" },
-    "team2": { "name": "Arsenal", "logo": "https://static.flashscore.com/res/image/data/pfchdCg5-vcNAdtF9.png" },
-    "kickoff_date": "2026-04-19", "kickoff_time": "22:30",
-    "stream_url": "https://test-streams.mux.dev/test_001/stream.m3u8"
-  },
-  {
-    "id": "Bayern-Stuttgart",
-    "league": "Bundesliga",
-    "team1": { "name": "Bayern Munich", "logo": "https://static.flashscore.com/res/image/data/tMir8iCr-SvLFaVNH.png" },
-    "team2": { "name": "VfB Stuttgart", "logo": "https://static.flashscore.com/res/image/data/tMir8iCr-SvLFaVNH.png" },
-    "kickoff_date": "2026-04-19", "kickoff_time": "22:30",
-    "stream_url": ""
-  },
-  {
-    "id": "Juventus-Bologna",
-    "league": "Serie A",
-    "team1": { "name": "Juventus", "logo": "https://static.flashscore.com/res/image/data/GKF3dlf5-0nz5yHcE.png" },
-    "team2": { "name": "Bologna", "logo": "https://static.flashscore.com/res/image/data/j3Tyh1GG-McvX4bye.png" },
-    "kickoff_date": "2026-04-20", "kickoff_time": "01:45",
-    "stream_url": ""
-  }
-];
-
-let hls = null;
-let currentMatch = null;
-let activeLeague = 'LIVE';
-
-// 1. Generate Bar Liga + Badge jumlah match
+// 3. FUNGSI LEAGUE BAR
 function renderLeagueBar() {
+  leagueBar.innerHTML = '';
   const leagueCounts = MATCHES.reduce((acc, m) => {
     acc[m.league] = (acc[m.league] || 0) + 1;
     return acc;
   }, {});
   const liveCount = MATCHES.filter(m => m.stream_url).length;
 
-  const liveBtn = document.querySelector('.league-item[data-league="LIVE"]');
-  liveBtn.innerHTML = `🔴 LIVE <span class="badge">${liveCount}</span>`;
+  const liveBtn = document.createElement('div');
+  liveBtn.className = 'league-item';
+  liveBtn.dataset.league = 'LIVE';
+  liveBtn.innerHTML = `<span class="dot"></span>LIVE<span class="badge">${liveCount}</span>`;
   liveBtn.onclick = () => openPopup('LIVE');
+  leagueBar.appendChild(liveBtn);
 
   Object.keys(leagueCounts).forEach(league => {
     const btn = document.createElement('div');
     btn.className = 'league-item';
     btn.dataset.league = league;
-    btn.innerHTML = `${league.toUpperCase()} <span class="badge">${leagueCounts[league]}</span>`;
+    btn.innerHTML = `${league}<span class="badge">${leagueCounts[league]}</span>`;
     btn.onclick = () => openPopup(league);
     leagueBar.appendChild(btn);
   });
+  setTimeout(updateScrollButtons, 100);
 }
 
-// 2. Popup Match
+// 4. FUNGSI SCROLL TOMBOL ‹ ›
+function updateScrollButtons() {
+  scrollLeftBtn.disabled = leagueBar.scrollLeft <= 0;
+  scrollRightBtn.disabled = leagueBar.scrollLeft >= leagueBar.scrollWidth - leagueBar.clientWidth - 1;
+}
+scrollLeftBtn.onclick = () => leagueBar.scrollBy({ left: -200, behavior: 'smooth' });
+scrollRightBtn.onclick = () => leagueBar.scrollBy({ left: 200, behavior: 'smooth' });
+leagueBar.addEventListener('scroll', updateScrollButtons);
+
+// 5. FUNGSI POPUP + PLAYER
 function openPopup(league) {
   activeLeague = league;
-  popupTitle.innerText = league === 'LIVE'? 'Pertandingan LIVE' : league.toUpperCase();
+  popupTitle.innerText = league === 'LIVE' ? 'Pertandingan LIVE' : league;
   renderPopupList();
   popupOverlay.classList.add('show');
   matchPopup.classList.add('show');
-  
-  document.querySelectorAll('.league-item').forEach(el => el.classList.remove('active'));
-  document.querySelector(`.league-item[data-league="${league}"]`)?.classList.add('active');
 }
-
 function closePopup() {
   popupOverlay.classList.remove('show');
   matchPopup.classList.remove('show');
@@ -91,46 +92,24 @@ function closePopup() {
 popupOverlay.onclick = closePopup;
 popupClose.onclick = closePopup;
 
-function getKickoffTimestamp(match) {
-  return new Date(`${match.kickoff_date}T${match.kickoff_time}:00+07:00`).getTime();
-}
-
-function formatDate(dateStr) {
-  const d = new Date(dateStr + 'T00:00:00+07:00');
-  return d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short' });
-}
-
 function renderPopupList() {
   popupList.innerHTML = '';
-  let filteredMatches = [...MATCHES];
-
-  if (activeLeague === 'LIVE') {
-    filteredMatches = MATCHES.filter(m => m.stream_url);
-  } else {
-    filteredMatches = MATCHES.filter(m => m.league === activeLeague);
-  }
-
-  filteredMatches.sort((a, b) => getKickoffTimestamp(a) - getKickoffTimestamp(b));
-
-  if (filteredMatches.length === 0) {
+  let filtered = activeLeague === 'LIVE' ? MATCHES.filter(m => m.stream_url) : MATCHES.filter(m => m.league === activeLeague);
+  if (filtered.length === 0) {
     popupList.innerHTML = '<div style="padding: 20px; text-align: center; color: #6b7280;">Ga ada match</div>';
     return;
   }
-
-  filteredMatches.forEach(match => {
+  filtered.forEach(match => {
     const isLive = !!match.stream_url;
     const item = document.createElement('div');
     item.className = 'popup-match-item';
     item.innerHTML = `
       <div class="popup-match-teams">
         <img src="${match.team1.logo}">
-        <div>
-          <div>${match.team1.name} vs ${match.team2.name}</div>
-          <div class="popup-match-date">${formatDate(match.kickoff_date)}</div>
-        </div>
+        <div>${match.team1.name} vs ${match.team2.name}</div>
       </div>
       <div class="popup-match-info">
-        ${isLive? '<div class="popup-match-live">● LIVE</div>' : ''}
+        ${isLive ? '<div class="popup-match-live">● LIVE</div>' : ''}
         <div class="popup-match-time">${match.kickoff_time}</div>
       </div>
     `;
@@ -139,9 +118,9 @@ function renderPopupList() {
   });
 }
 
-// 3. Pilih Match + Play
 function selectMatch(match) {
-  currentMatch = match;
+  currentMatchIndex = MATCHES.findIndex(m => m.id === match.id);
+  updateNavButtons();
   closePopup();
   scoreboard.innerText = `${match.team1.name} vs ${match.team2.name} | ${match.kickoff_time}`;
   loadStream(match.stream_url);
@@ -164,7 +143,18 @@ function loadStream(url) {
   }
 }
 
-// 4. Chat
+// 6. FUNGSI TOMBOL PREV/NEXT DI PLAYER
+function updateNavButtons() {
+  prevBtn.disabled = currentMatchIndex <= 0;
+  nextBtn.disabled = currentMatchIndex >= MATCHES.length - 1;
+}
+prevBtn.onclick = () => { if (currentMatchIndex > 0) selectMatch(MATCHES[currentMatchIndex - 1]); };
+nextBtn.onclick = () => { if (currentMatchIndex < MATCHES.length - 1) selectMatch(MATCHES[currentMatchIndex + 1]); };
+
+// 7. CHAT
+const chatInput = document.getElementById('chatInput');
+const sendBtn = document.getElementById('sendBtn');
+const chatBox = document.getElementById('chatBox');
 function sendChat() {
   const text = chatInput.value.trim();
   if (!text) return;
@@ -178,32 +168,7 @@ function sendChat() {
 sendBtn.onclick = sendChat;
 chatInput.onkeydown = (e) => { if (e.key === 'Enter') sendChat(); };
 
-// SCROLL LEAGUE BAR PAKE TOMBOL
-const scrollLeftBtn = document.getElementById('scrollLeft');
-const scrollRightBtn = document.getElementById('scrollRight');
-const scrollAmount = 200; // Jarak scroll tiap klik
-
-function updateScrollButtons() {
-  scrollLeftBtn.disabled = leagueBar.scrollLeft <= 0;
-  scrollRightBtn.disabled = leagueBar.scrollLeft >= leagueBar.scrollWidth - leagueBar.clientWidth - 1;
-}
-
-scrollLeftBtn.onclick = () => {
-  leagueBar.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-};
-scrollRightBtn.onclick = () => {
-  leagueBar.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-};
-
-leagueBar.addEventListener('scroll', updateScrollButtons);
-// Panggil sekali pas load
-setTimeout(updateScrollButtons, 100);
-
-
-
-// INIT - PALING BAWAH SCRIPT.JS
+// 8. INIT - JALANIN SEMUA
 renderLeagueBar();
-
-// Auto play match pertama yang live
 const firstLive = MATCHES.find(m => m.stream_url);
 if (firstLive) selectMatch(firstLive);
