@@ -1,81 +1,100 @@
 const video = document.getElementById('video');
-const matchBar = document.getElementById('matchBar');
-const leagueFilter = document.getElementById('leagueFilter');
+const leagueBar = document.getElementById('leagueBar');
 const scoreboard = document.getElementById('scoreboard');
 const chatInput = document.getElementById('chatInput');
 const chatBox = document.getElementById('chatBox');
 const sendBtn = document.getElementById('sendBtn');
+const popupOverlay = document.getElementById('popupOverlay');
+const matchPopup = document.getElementById('matchPopup');
+const popupTitle = document.getElementById('popupTitle');
+const popupList = document.getElementById('popupList');
+const popupClose = document.getElementById('popupClose');
+
 let hls = null;
 let currentMatch = null;
-let activeLeague = 'ALL';
+let activeLeague = 'LIVE';
 
-// 1. Generate Tombol Filter Liga dari JSON
-function renderLeagueFilters() {
+// 1. Generate Tombol Liga
+function renderLeagueBar() {
   const leagues = [...new Set(MATCHES.map(m => m.league))];
   leagues.forEach(league => {
     const btn = document.createElement('div');
-    btn.className = 'league-btn';
+    btn.className = 'league-item';
     btn.dataset.league = league;
     btn.innerText = league.toUpperCase();
-    btn.onclick = () => filterByLeague(league, btn);
-    leagueFilter.appendChild(btn);
+    btn.onclick = () => openPopup(league);
+    leagueBar.appendChild(btn);
   });
-
-  // Event buat tombol SEMUA & LIVE
-  document.querySelectorAll('.league-btn[data-league="ALL"],.league-btn[data-league="LIVE"]').forEach(btn => {
-    btn.onclick = () => filterByLeague(btn.dataset.league, btn);
-  });
+  // Event buat tombol LIVE
+  document.querySelector('.league-item[data-league="LIVE"]').onclick = () => openPopup('LIVE');
 }
 
-// 2. Filter + Render Match Bar
-function filterByLeague(league, btnElement) {
+// 2. Buka Popup + Tampilkan List Match
+function openPopup(league) {
   activeLeague = league;
-  document.querySelector('.league-btn.active').classList.remove('active');
-  btnElement.classList.add('active');
-  renderMatches();
+  popupTitle.innerText = league === 'LIVE'? 'Pertandingan LIVE' : league.toUpperCase();
+  renderPopupList();
+  popupOverlay.classList.add('show');
+  matchPopup.classList.add('show');
 }
 
-function renderMatches() {
-  matchBar.innerHTML = '';
-  let filteredMatches = MATCHES;
+function closePopup() {
+  popupOverlay.classList.remove('show');
+  matchPopup.classList.remove('show');
+}
+
+popupOverlay.onclick = closePopup;
+popupClose.onclick = closePopup;
+
+function getKickoffTimestamp(match) {
+  return new Date(`${match.kickoff_date}T${match.kickoff_time}:00+07:00`).getTime();
+}
+
+function renderPopupList() {
+  popupList.innerHTML = '';
+  let filteredMatches = [...MATCHES];
 
   if (activeLeague === 'LIVE') {
-    filteredMatches = MATCHES.filter(m => m.stream_url); // Yang ada stream_url = live
-  } else if (activeLeague!== 'ALL') {
+    filteredMatches = MATCHES.filter(m => m.stream_url);
+  } else {
     filteredMatches = MATCHES.filter(m => m.league === activeLeague);
   }
 
+  // Sort by waktu kickoff
+  filteredMatches.sort((a, b) => getKickoffTimestamp(a) - getKickoffTimestamp(b));
+
   if (filteredMatches.length === 0) {
-    matchBar.innerHTML = '<div style="padding: 10px; font-size: 13px; color: #6b7280;">Ga ada match</div>';
-    video.src = '';
-    scoreboard.innerText = 'Pilih match dulu';
+    popupList.innerHTML = '<div style="padding: 20px; text-align: center; color: #6b7280;">Ga ada match</div>';
     return;
   }
 
-  filteredMatches.forEach((match, index) => {
+  filteredMatches.forEach(match => {
     const isLive = match.stream_url? true : false;
     const item = document.createElement('div');
-    item.className = 'match-item';
-    if (index === 0) item.classList.add('active');
-
+    item.className = 'popup-match-item';
     item.innerHTML = `
-      ${isLive? '<span class="live">●</span>' : ''}
-      <img src="${match.team1.logo}" title="${match.team1.name}">
-      <span>${match.team1.name.split(' ')[0]}</span>
+      <div class="popup-match-teams">
+        <img src="${match.team1.logo}">
+        <span>${match.team1.name} vs ${match.team2.name}</span>
+      </div>
+      <div class="popup-match-info">
+        ${isLive? '<div class="popup-match-live">● LIVE</div>' : ''}
+        <div class="popup-match-time">${match.kickoff_time}</div>
+      </div>
     `;
-    item.onclick = () => selectMatch(match, item);
-    matchBar.appendChild(item);
+    item.onclick = () => selectMatch(match);
+    popupList.appendChild(item);
   });
-
-  // Auto load match pertama dari hasil filter
-  selectMatch(filteredMatches[0], matchBar.querySelector('.match-item'));
 }
 
-// 3. Pilih Match + Load Stream
-function selectMatch(match, element) {
+// 3. Pilih Match + Play
+function selectMatch(match) {
   currentMatch = match;
-  document.querySelector('.match-item.active')?.classList.remove('active');
-  element.classList.add('active');
+  closePopup();
+  
+  // Update active league button
+  document.querySelectorAll('.league-item').forEach(el => el.classList.remove('active'));
+  document.querySelector(`.league-item[data-league="${activeLeague}"]`)?.classList.add('active');
 
   scoreboard.innerText = `${match.team1.name} vs ${match.team2.name} | ${match.kickoff_time}`;
   loadStream(match.stream_url);
@@ -87,7 +106,6 @@ function loadStream(url) {
     scoreboard.innerText = currentMatch.team1.name + ' vs ' + currentMatch.team2.name + ' - Belum Live';
     return;
   }
-
   if (Hls.isSupported()) {
     if (hls) hls.destroy();
     hls = new Hls();
@@ -98,27 +116,21 @@ function loadStream(url) {
   }
 }
 
-// 4. Chat Function
+// 4. Chat
 function sendChat() {
   const text = chatInput.value.trim();
   if (!text) return;
-
   const msg = document.createElement('div');
   msg.className = 'chat-msg';
-  msg.innerHTML = `
-    <span class="chat-lv lv1">Lv1</span>
-    <div><span class="chat-name">Guest:</span> <span class="chat-text">${text}</span></div>
-  `;
+  msg.innerHTML = `<span class="chat-lv lv1">Lv1</span><div><span class="chat-name">Guest:</span> <span class="chat-text">${text}</span></div>`;
   chatBox.appendChild(msg);
   chatInput.value = '';
   window.scrollTo(0, document.body.scrollHeight);
 }
 
 sendBtn.onclick = sendChat;
-chatInput.onkeydown = (e) => {
-  if (e.key === 'Enter') sendChat();
-};
+chatInput.onkeydown = (e) => { if (e.key === 'Enter') sendChat(); };
 
-// Init
-renderLeagueFilters();
-renderMatches();
+// Init: Langsung buka popup LIVE pertama kali
+renderLeagueBar();
+openPopup('LIVE');
