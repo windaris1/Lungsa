@@ -10,9 +10,9 @@
     "kickoff_time": "06:00",
     "duration": 120,
     "channels": [
-      { "name": "CH 1 - HD", "url": "https://pluyer.pages.dev/?shaka=bein3aus" },
-      { "name": "CH 2 - FHD", "url": "https://example.com/stream/12346" },
-      { "name": "CH 3 - Backup", "url": "https://example.com/stream/12347" }
+      { "name": "CH 1 - HD", "url": "https://pluyer.pages.dev/?shaka=spotv" },
+      { "name": "CH 2 - FHD", "url": "https://pluyer.pages.dev/?shaka=spotv2" },
+      { "name": "CH 3 - Backup", "url": "https://pluyer.pages.dev/?shaka=tnt1" }
     ]
   },
   {
