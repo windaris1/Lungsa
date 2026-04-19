@@ -20,26 +20,15 @@
   <div class="player-wrap">
     <div class="video-container">
       <video id="video" controls autoplay muted></video>
-      <div class="scoreboard" id="scoreboard">U.RA 0 - 0 L.BI | 11:45</div>
+      <div class="scoreboard" id="scoreboard">Pilih match dulu</div>
       <div class="live-badge">● LIVE</div>
     </div>
   </div>
 
-  <div class="match-bar" id="matchBar">
-    <div class="match-item active" data-stream="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8">
-      <span class="live">●</span>
-      <img src="https://static.flashscore.com/res/image/data/Gr0cGteM-KCp4zq5F.png">
-      <span>L.BI</span>
-    </div>
-    <div class="match-item" data-stream="https://test-streams.mux.dev/test_001/stream.m3u8">
-      <span class="live">●</span>
-      <img src="https://static.flashscore.com/res/image/data/UXcqj7HG-lQuhqN8N.png">
-      <span>U.URA</span>
-    </div>
-    <div class="match-item" data-stream="">
-      <img src="https://static.flashscore.com/res/image/data/pfchdCg5-vcNAdtF9.png">
-      <span>L.LEO</span>
-    </div>
+  <!-- BAR LIGA - KALO DIKLIK MUNCUL POPUP -->
+  <div class="league-bar" id="leagueBar">
+    <div class="league-item" data-league="LIVE">🔴 LIVE</div>
+    <!-- Liga lain di-generate JS -->
   </div>
 
   <div class="tabs">
@@ -55,25 +44,12 @@
 
   <div class="chat-container">
     <div class="system-msg">
-      <b>Tin nhắn hệ thống 💯💯💯</b> BẢO HIỂM 100% ĐƠN CƯỢC ĐẦU LÊN TỚI 1888K ✅ TẶNG 5% TIỀN NẠP T7, CN ✅
+      <b>Tin nhắn hệ thống 💯💯💯</b> BẢO HIỂM 100% ĐƠN CƯỢC ĐẦU LÊN TỚI 1888K ✅
     </div>
-    
     <div class="chat-box" id="chatBox">
       <div class="chat-msg">
         <span class="chat-lv lv5">Lv5</span>
-        <div><span class="chat-name">win and lose:</span> <span class="chat-text">MẤY LOL INDO DIỄN GHÊ LẮM, BANH MÃI ĐẦU ĐÂU MÀ NÓ BIỂU CẢM LA HÉT BÓNG HCAMJ TAY, VÃI THẦN</span></div>
-      </div>
-      <div class="chat-msg">
-        <span class="chat-lv lv3">Lv3</span>
-        <div><span class="chat-name">Chúa_Nhẫn:</span> <span class="chat-text">ok9 có mặt ở vn lâu chưa ura ơi</span></div>
-      </div>
-      <div class="chat-msg">
-        <span class="chat-lv lv2">Lv2</span>
-        <div><span class="chat-name">Chú Tễu:</span> <span class="chat-text">tham gia phòng trò truyện</span></div>
-      </div>
-      <div class="chat-msg">
-        <span class="chat-lv lv1">Lv1</span>
-        <div><span class="chat-name">Bappple8386:</span> <span class="chat-text">Đội nào đang kiểm soát bóng tốt hơn</span></div>
+        <div><span class="chat-name">win and lose:</span> <span class="chat-text">MẤY LOL INDO DIỄN GHÊ LẮM</span></div>
       </div>
     </div>
   </div>
@@ -83,6 +59,17 @@
     <button id="sendBtn">GỬI</button>
   </div>
 
+  <!-- POPUP DAFTAR MATCH -->
+  <div class="match-popup-overlay" id="popupOverlay"></div>
+  <div class="match-popup" id="matchPopup">
+    <div class="popup-header">
+      <span id="popupTitle">Pilih Pertandingan</span>
+      <span id="popupClose">✕</span>
+    </div>
+    <div class="popup-list" id="popupList"></div>
+  </div>
+
+  <script src="matches.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
