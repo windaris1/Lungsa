@@ -20,97 +20,19 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .player-nav.next { right: 0; border-top-left-radius: 8px; border-bottom-left-radius: 8px; }
 .player-nav:disabled { opacity: 0 !important; cursor: default; }
 
-/* CHANNEL BAR - MODEL KUNING KAYK CONTOH */
-.channel-bar-wrapper {
-  position: relative;
-  background: #000;
-  border: 2px solid #facc15; /* BORDER KUNING */
-  border-radius: 8px;
-  margin: 8px; /* KASIH JARAK DARI VIDEO */
-}
-.channel-bar {
-  display: flex;
-  overflow-x: auto;
-  gap: 8px;
-  padding: 8px 56px; /* 56px BIAR ADA SPACE KE TOMBOL */
-  scroll-behavior: smooth;
-  white-space: nowrap;
-}
-.channel-bar::-webkit-scrollbar { display: none; }
-.channel-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  flex-shrink: 0;
-  background: #1e293b; /* BIRU DONGKER */
-  border: 1px solid #334155;
-  padding: 0 12px 0 8px;
-  border-radius: 6px;
-  cursor: pointer;
-  height: 44px;
-  min-width: 140px; /* BIAR LEBARNYA SERAGAM */
-  justify-content: space-between;
-}
-.channel-item.active {
-  background: #3b82f6; /* BIRU TERANG PAS AKTIF */
-  border-color: #60a5fa;
-}
-.channel-item .left-wrap {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.channel-item img {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 1px solid #fff;
-}
-.channel-item .ch-name {
-  color: #fff;
-  font-size: 14px;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-.channel-item .live-icon {
-  width: 24px;
-  height: 24px;
-  background: #ef4444; /* MERAH */
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-}
-
-/* TOMBOL KIRI KANAN KOTAK ITEM */
-.channel-scroll-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: #000;
-  border: 1px solid #334155;
-  color: #fff;
-  width: 40px;
-  height: 44px; /* SAMA TINGGI SAMA ITEM */
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 26px;
-  font-weight: 700;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.channel-scroll-btn:hover { background: #1e293b; }
-.channel-scroll-btn:active { transform: translateY(-50%) scale(0.95); }
-.channel-scroll-btn.left { left: 8px; }
-.channel-scroll-btn.right { right: 8px; }
-.channel-scroll-btn:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-}
+/* LEAGUE BAR - VERSI FINAL */
+.league-bar-wrapper { position: relative; background: var(--card); border-bottom: 1px solid var(--border); }
+.league-bar { display: flex; overflow-x: auto; gap: 8px; padding: 10px 44px; scroll-behavior: smooth; white-space: nowrap; }
+.league-bar::-webkit-scrollbar { display: none; }
+.league-item { display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; background: var(--bg); border: 1px solid var(--border); padding: 0 14px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; height: 36px; line-height: 1; }
+.league-item.active { background: var(--blue); border-color: var(--blue); }
+.league-item .badge { background: var(--red); color: #fff; font-size: 10px; padding: 2px 5px; border-radius: 10px; min-width: 16px; text-align: center; }
+.league-item .dot { width: 8px; height: 8px; background: var(--red); border-radius: 50%; flex-shrink: 0; }
+.scroll-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(21,21,31,0.9); border: 1px solid var(--border); color: var(--text); width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 20px; z-index: 10; display: flex; align-items: center; justify-content: center; }
+.scroll-btn:hover { background: var(--blue); }
+.scroll-btn.left { left: 6px; }
+.scroll-btn.right { right: 6px; }
+.scroll-btn:disabled { opacity: 0.2; cursor: not-allowed; }
 
 /* SISANYA */
 .match-popup-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 200; display: none; }
