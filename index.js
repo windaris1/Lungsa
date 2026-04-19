@@ -110,8 +110,11 @@ function renderPopupList() {
     item.className = 'popup-match-item';
     item.innerHTML = `
       <div class="popup-match-teams">
-        <img src="${match.team1.logo}">
-        <div>${match.team1.name} vs ${match.team2.name}</div>
+        <img src="${match.league_logo}" alt="${match.league}">
+        <div class="popup-match-detail">
+          <div class="popup-match-name">${match.team1.name} vs ${match.team2.name}</div>
+          <div class="popup-match-league">${match.league}</div>
+        </div>
       </div>
       <div class="popup-match-info">
         ${isLive ? '<div class="popup-match-live">● LIVE</div>' : ''}
@@ -122,7 +125,6 @@ function renderPopupList() {
     popupList.appendChild(item);
   });
 }
-
 function selectMatch(match) {
   closePopup();
   scoreboard.innerText = `${match.team1.name} vs ${match.team2.name} | ${match.kickoff_time}`;
