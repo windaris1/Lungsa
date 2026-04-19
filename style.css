@@ -20,19 +20,85 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .player-nav.next { right: 0; border-top-left-radius: 8px; border-bottom-left-radius: 8px; }
 .player-nav:disabled { opacity: 0 !important; cursor: default; }
 
-/* LEAGUE BAR - VERSI FINAL */
-.league-bar-wrapper { position: relative; background: var(--card); border-bottom: 1px solid var(--border); }
-.league-bar { display: flex; overflow-x: auto; gap: 8px; padding: 10px 44px; scroll-behavior: smooth; white-space: nowrap; }
-.league-bar::-webkit-scrollbar { display: none; }
-.league-item { display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; background: var(--bg); border: 1px solid var(--border); padding: 0 14px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; height: 36px; line-height: 1; }
-.league-item.active { background: var(--blue); border-color: var(--blue); }
-.league-item .badge { background: var(--red); color: #fff; font-size: 10px; padding: 2px 5px; border-radius: 10px; min-width: 16px; text-align: center; }
-.league-item .dot { width: 8px; height: 8px; background: var(--red); border-radius: 50%; flex-shrink: 0; }
-.scroll-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(21,21,31,0.9); border: 1px solid var(--border); color: var(--text); width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 20px; z-index: 10; display: flex; align-items: center; justify-content: center; }
-.scroll-btn:hover { background: var(--blue); }
-.scroll-btn.left { left: 6px; }
-.scroll-btn.right { right: 6px; }
-.scroll-btn:disabled { opacity: 0.2; cursor: not-allowed; }
+/* CHANNEL BAR - KASIH JARAK */
+.channel-bar-wrapper {
+  position: relative;
+  background: #000; /* Itemnya hitam kayak contoh */
+  border-bottom: 1px solid var(--border);
+}
+.channel-bar {
+  display: flex;
+  overflow-x: auto;
+  gap: 10px; /* JARAK ANTAR ITEM */
+  padding: 10px 60px; /* INI KUNCINYA: 60px kiri-kanan biar ada space ke tombol */
+  scroll-behavior: smooth;
+  white-space: nowrap;
+}
+.channel-bar::-webkit-scrollbar { display: none; }
+.channel-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  background: #0a0a0f; /* Item lebih gelap dari wrapper */
+  border: 1px solid #2a2a3a;
+  padding: 0 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  height: 42px; /* SAMA TINGGI SAMA TOMBOL */
+  color: #e5e5e5;
+}
+.channel-item.active {
+  background: var(--blue);
+  border-color: var(--blue);
+}
+.channel-item img {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #444;
+}
+.channel-item .live-icon {
+  width: 20px;
+  height: 20px;
+  background: var(--red);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+}
+
+/* TOMBOL CHANNEL KIRI KANAN - VERSI NEMPEL PINGGIR */
+.channel-scroll-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #000;
+  border: 1px solid #2a2a3a;
+  color: #fff;
+  width: 44px; /* LEBARIN DIKIT */
+  height: 42px; /* SAMAIN SAMA ITEM */
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 26px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.channel-scroll-btn:hover { background: var(--blue); border-color: var(--blue); }
+.channel-scroll-btn:active { transform: translateY(-50%) scale(0.95); }
+.channel-scroll-btn.left { left: 8px; } /* NEMPEL PINGGIR KASIH 8px */
+.channel-scroll-btn.right { right: 8px; }
+.channel-scroll-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  background: #111;
+}
 
 /* SISANYA */
 .match-popup-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 200; display: none; }
