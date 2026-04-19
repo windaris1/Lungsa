@@ -1,203 +1,66 @@
 :root {
-  --bg: #0a0a0f;
-  --card: #15151f;
-  --primary: #3b82f6;
-  --text: #e5e5e5;
-  --border: #2a2a3a;
-  --yellow: #facc15;
+  --bg: #0a0a0f; --card: #15151f; --primary: #3b82f6;
+  --text: #e5e5e5; --border: #2a2a3a; --yellow: #facc15;
+  --red: #ef4444; --blue: #3b82f6;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-}
-.header {
-  background: var(--card);
-  padding: 12px 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid var(--border);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); }
+.header { background: var(--card); padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
 .logo { font-size: 22px; font-weight: 800; color: var(--yellow); }
 .header-icons { display: flex; gap: 16px; font-size: 20px; }
-
-.player-wrap { position: relative; background: #000; }
-.video-container { position: relative; padding-top: 56.25%; }
+.player-wrap { position: relative; background: #000; margin-bottom: 0; }
+.video-container { position: relative; padding-top: 56.25%; line-height: 0; }
 #video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-.scoreboard {
-  position: absolute; top: 8px; left: 8px;
-  background: rgba(0,0,0,0.7); padding: 4px 10px;
-  border-radius: 4px; font-size: 14px; font-weight: 600;
-}
-.live-badge {
-  position: absolute; top: 8px; right: 8px;
-  background: #ef4444; padding: 2px 8px;
-  border-radius: 4px; font-size: 12px; font-weight: 700;
-}
+.scoreboard { position: absolute; top: 8px; left: 8px; background: rgba(0,0,0,0.7); padding: 4px 10px; border-radius: 4px; font-size: 14px; font-weight: 600; line-height: normal; }
+.live-badge { position: absolute; top: 8px; right: 8px; background: var(--red); padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 700; line-height: normal; }
+.player-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); border: none; color: #fff; width: 40px; height: 60px; cursor: pointer; font-size: 32px; font-weight: 300; z-index: 10; opacity: 0; transition: opacity 0.2s; }
+.player-wrap:hover .player-nav { opacity: 1; }
+.player-nav:hover { background: rgba(59,130,246,0.8); }
+.player-nav.prev { left: 0; border-top-right-radius: 8px; border-bottom-right-radius: 8px; }
+.player-nav.next { right: 0; border-top-left-radius: 8px; border-bottom-left-radius: 8px; }
+.player-nav:disabled { opacity: 0 !important; cursor: default; }
 
-/* LEAGUE BAR + SCROLL BUTTONS */
-.league-bar-wrapper {
-  position: relative;
-  background: var(--card);
-  border-bottom: 1px solid var(--border);
-}
-.league-bar { 
-  display: flex; 
-  overflow-x: auto; 
-  gap: 8px; 
-  padding: 10px 40px;
-  scroll-behavior: smooth;
-  align-items: center; /* INI PENTING BIAR RATA TENGAH */
-}
+/* LEAGUE BAR - VERSI FINAL */
+.league-bar-wrapper { position: relative; background: var(--card); border-bottom: 1px solid var(--border); }
+.league-bar { display: flex; overflow-x: auto; gap: 8px; padding: 10px 44px; scroll-behavior: smooth; white-space: nowrap; }
 .league-bar::-webkit-scrollbar { display: none; }
-.league-item { 
-  flex: 0 0 auto; /* BIAR GA MELAR FULL WIDTH */
-  background: var(--bg); 
-  border: 1px solid var(--border); 
-  padding: 8px 14px; 
-  border-radius: 8px; 
-  font-size: 13px; 
-  font-weight: 700; 
-  cursor: pointer; 
-  white-space: nowrap;
-  height: 36px; /* SAMAIN TINGGINYA */
-  display: flex; /* BIAR ISI RATA TENGAH */
-  align-items: center;
-  gap: 6px;
-}
+.league-item { display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; background: var(--bg); border: 1px solid var(--border); padding: 0 14px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; height: 36px; line-height: 1; }
 .league-item.active { background: var(--blue); border-color: var(--blue); }
-.league-item .badge { 
-  background: var(--red); 
-  color: #fff; 
-  font-size: 10px; 
-  padding: 1px 5px; 
-  border-radius: 10px; 
-  line-height: 1;
-}
-.league-item .dot { 
-  width: 8px; 
-  height: 8px; 
-  background: var(--red); 
-  border-radius: 50%; 
-  display: inline-block;
-  flex-shrink: 0;
-}
-
-/* TOMBOL KIRI KANAN */
-.scroll-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0,0,0,0.6);
-  border: 1px solid var(--border);
-  color: var(--text);
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 18px;
-  font-weight: 700;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+.league-item .badge { background: var(--red); color: #fff; font-size: 10px; padding: 2px 5px; border-radius: 10px; min-width: 16px; text-align: center; }
+.league-item .dot { width: 8px; height: 8px; background: var(--red); border-radius: 50%; flex-shrink: 0; }
+.scroll-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(21,21,31,0.9); border: 1px solid var(--border); color: var(--text); width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 20px; z-index: 10; display: flex; align-items: center; justify-content: center; }
 .scroll-btn:hover { background: var(--blue); }
 .scroll-btn.left { left: 6px; }
 .scroll-btn.right { right: 6px; }
-.scroll-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.scroll-btn:disabled { opacity: 0.2; cursor: not-allowed; }
 
-/* POPUP MATCH */
-.match-popup-overlay {
-  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.6); z-index: 200; display: none;
-}
-.match-popup {
-  position: fixed; bottom: 0; left: 0; right: 0;
-  background: var(--card); z-index: 201;
-  border-top-left-radius: 16px; border-top-right-radius: 16px;
-  transform: translateY(100%); transition: transform 0.3s ease;
-  max-height: 70vh; display: flex; flex-direction: column;
-}
+/* SISANYA */
+.match-popup-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 200; display: none; }
+.match-popup { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); z-index: 201; border-top-left-radius: 16px; border-top-right-radius: 16px; transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1); max-height: 70vh; display: flex; flex-direction: column; }
 .match-popup.show { transform: translateY(0); }
 .match-popup-overlay.show { display: block; }
-
-.popup-header {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 16px; border-bottom: 1px solid var(--border);
-  font-weight: 700; font-size: 16px;
-}
+.popup-header { display: flex; justify-content: space-between; align-items: center; padding: 16px; border-bottom: 1px solid var(--border); font-weight: 700; font-size: 16px; }
 #popupClose { font-size: 20px; cursor: pointer; padding: 0 8px; }
 .popup-list { overflow-y: auto; padding: 8px 0; }
-
-.popup-match-item {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 12px 16px; border-bottom: 1px solid var(--border);
-  cursor: pointer;
-}
+.popup-match-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--border); cursor: pointer; }
 .popup-match-item:hover { background: var(--bg); }
 .popup-match-teams { display: flex; align-items: center; gap: 12px; font-weight: 600; }
 .popup-match-teams img { width: 24px; height: 24px; }
 .popup-match-info { text-align: right; font-size: 13px; }
-.popup-match-time { color: var(--primary); font-weight: 700; }
-.popup-match-live { color: #ef4444; font-weight: 700; font-size: 12px; }
-
-.tabs {
-  display: flex; background: var(--card);
-  border-bottom: 1px solid var(--border);
-}
-.tab {
-  flex: 1; padding: 12px; text-align: center;
-  font-weight: 600; cursor: pointer; font-size: 14px;
-}
-.tab.active { color: var(--primary); border-bottom: 2px solid var(--primary); }
-
-.notice {
-  background: #1e293b; padding: 10px 16px;
-  font-size: 13px; border-bottom: 1px solid var(--border);
-}
-.notice a { color: var(--primary); }
-
-.system-msg {
-  background: #422006; color: var(--yellow);
-  padding: 10px 16px; font-size: 13px;
-  border-bottom: 1px solid var(--border);
-}
-
-.chat-box { padding: 8px 0; }
-.chat-msg {
-  padding: 6px 16px; font-size: 14px;
-  display: flex; gap: 8px; align-items: start;
-}
-.chat-lv {
-  font-size: 11px; padding: 1px 6px; border-radius: 4px;
-  font-weight: 700; flex-shrink: 0;
-}
-.lv1 { background: #4b5563; }
-.lv2 { background: #059669; }
-.lv3 { background: #2563eb; }
-.lv5 { background: #dc2626; }
-.chat-name { font-weight: 600; color: #60a5fa; }
-.chat-text { word-break: break-word; }
-
-.chat-input {
-  position: fixed; bottom: 0; left: 0; right: 0;
-  display: flex; padding: 8px; background: var(--card);
-  border-top: 1px solid var(--border); gap: 8px; z-index: 50;
-}
-.chat-input input {
-  flex: 1; background: var(--bg); border: 1px solid var(--border);
-  color: var(--text); padding: 10px 14px; border-radius: 20px;
-  outline: none;
-}
-.chat-input button {
-  background: var(--primary); border: none; color: #fff;
-  padding: 10px 20px; border-radius: 20px; font-weight: 700;
-  cursor: pointer;
-}
+.popup-match-time { color: var(--blue); font-weight: 700; }
+.popup-match-live { color: var(--red); font-weight: 700; font-size: 12px; }
+.tabs { display: flex; background: var(--card); border-bottom: 1px solid var(--border); }
+.tab { flex: 1; padding: 12px 8px; text-align: center; font-weight: 700; cursor: pointer; font-size: 13px; }
+.tab.active { color: var(--blue); border-bottom: 2px solid var(--blue); }
+.notice { background: #1e293b; padding: 10px 16px; font-size: 13px; border-bottom: 1px solid var(--border); }
+.notice a { color: var(--blue); }
+.system-msg { background: #422006; color: var(--yellow); padding: 10px 16px; font-size: 13px; border-bottom: 1px solid var(--border); }
 .chat-container { padding-bottom: 70px; }
+.chat-box { padding: 8px 0; }
+.chat-msg { padding: 6px 16px; font-size: 14px; display: flex; gap: 8px; align-items: start; }
+.chat-lv { font-size: 11px; padding: 1px 6px; border-radius: 4px; font-weight: 700; flex-shrink: 0; color: #fff; }
+.lv1 { background: #4b5563; } .lv5 { background: #dc2626; }
+.chat-name { font-weight: 600; color: #60a5fa; } .chat-text { word-break: break-word; }
+.chat-input { position: fixed; bottom: 0; left: 0; right: 0; display: flex; padding: 8px; background: var(--card); border-top: 1px solid var(--border); gap: 8px; z-index: 50; }
+.chat-input input { flex: 1; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 10px 14px; border-radius: 20px; outline: none; }
+.chat-input button { background: var(--blue); border: none; color: #fff; padding: 10px 20px; border-radius: 20px; font-weight: 700; cursor: pointer; }
