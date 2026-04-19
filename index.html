@@ -1,51 +1,45 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="vi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sibal TV - Live Streaming</title>
+  <title>Sibal TV</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 </head>
 <body>
-
   <header class="header">
     <div class="logo">Sibal TV</div>
-    <div class="header-icons">
-      <span>☀️</span>
-      <span>🔔</span>
-    </div>
+    <div class="header-icons"><span>☀️</span><span>🔔</span></div>
   </header>
 
   <div class="player-wrap">
     <div class="video-container">
-      <video id="video" controls autoplay muted></video>
+      <video id="video" controls autoplay muted playsinline></video>
       <div class="scoreboard" id="scoreboard">Pilih match dulu</div>
       <div class="live-badge">● LIVE</div>
+      <button class="player-nav prev" id="prevMatch">‹</button>
+      <button class="player-nav next" id="nextMatch">›</button>
     </div>
   </div>
 
-<!-- BAR LIGA - KALO DIKLIK MUNCUL POPUP -->
-<div class="league-bar-wrapper">
-  <button class="scroll-btn left" id="scrollLeft">‹</button>
-  <div class="league-bar" id="leagueBar"></div>
-  <button class="scroll-btn right" id="scrollRight">›</button>
-</div>
-
-<div class="tabs">
-  <div class="tab">🏠</div>
-  <div class="tab active">TRÒ CHUYỆN</div>
-  <div class="tab">OK9</div>
- </div>
-
-  <div class="notice">
-    <b>Thông báo:</b> NHÓM KÈO VIP: https://t.me/KE... <a href="#">Xem thêm</a>
+  <!-- INI YANG SERING KELEWAT -->
+  <div class="league-bar-wrapper">
+    <button class="scroll-btn left" id="scrollLeft">‹</button>
+    <div class="league-bar" id="leagueBar"></div>
+    <button class="scroll-btn right" id="scrollRight">›</button>
   </div>
+
+  <div class="tabs">
+    <div class="tab">🏠</div>
+    <div class="tab active">TRÒ CHUYỆN</div>
+    <div class="tab">OK9</div>
+  </div>
+
+  <div class="notice"><b>Thông báo:</b> NHÓM KÈO VIP: https://t.me/KE... <a href="#">Xem thêm</a></div>
+  <div class="system-msg"><b>Tin nhắn hệ thống 💯💯💯</b> BẢO HIỂM 100% ĐƠN CƯỢC ĐẦU LÊN TỚI 1888K ✅</div>
 
   <div class="chat-container">
-    <div class="system-msg">
-      <b>Tin nhắn hệ thống 💯💯💯</b> BẢO HIỂM 100% ĐƠN CƯỢC ĐẦU LÊN TỚI 1888K ✅
-    </div>
     <div class="chat-box" id="chatBox">
       <div class="chat-msg">
         <span class="chat-lv lv5">Lv5</span>
@@ -59,17 +53,12 @@
     <button id="sendBtn">GỬI</button>
   </div>
 
-  <!-- POPUP DAFTAR MATCH -->
   <div class="match-popup-overlay" id="popupOverlay"></div>
   <div class="match-popup" id="matchPopup">
-    <div class="popup-header">
-      <span id="popupTitle">Pilih Pertandingan</span>
-      <span id="popupClose">✕</span>
-    </div>
+    <div class="popup-header"><span id="popupTitle">Pilih Pertandingan</span><span id="popupClose">✕</span></div>
     <div class="popup-list" id="popupList"></div>
   </div>
 
-  <script src="https://sibaltv.pages.dev/skod.json"></script>
   <script src="index.js"></script>
 </body>
 </html>
