@@ -91,6 +91,7 @@ function closePopup() {
 popupOverlay.onclick = closePopup;
 popupClose.onclick = closePopup;
 
+
 function renderPopupList() {
   filterActiveMatches();
   popupList.innerHTML = '';
@@ -102,31 +103,30 @@ function renderPopupList() {
     popupList.innerHTML = '<div style="padding: 20px; text-align: center; color: #6b7280;">Ga ada jadwal</div>';
     return;
   }
- 
-filtered.forEach(match => {
-  const isLive = isMatchLive(match);
-  // FORMAT TANGGAL: 2026-04-19 -> 19 Apr 2026
-  const dateObj = new Date(`${match.kickoff_date}T00:00:00`);
-  const tgl = dateObj.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
-  
-  const item = document.createElement('div');
-  item.className = 'popup-match-item';
-  item.innerHTML = `
-    <div class="popup-match-teams">
-      <img src="${match.league_logo}" alt="${match.league}">
-      <div class="popup-match-detail">
-        <div class="popup-match-name">${match.team1.name} vs ${match.team2.name}</div>
-        <div class="popup-match-league">${match.league} • ${tgl}</div>
+  filtered.forEach(match => {
+    const isLive = isMatchLive(match);
+    const dateObj = new Date(`${match.kickoff_date}T00:00:00`);
+    const tgl = dateObj.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+    
+    const item = document.createElement('div');
+    item.className = 'popup-match-item';
+    item.innerHTML = `
+      <div class="popup-match-teams">
+        <img src="${match.league_logo}" alt="${match.league}">
+        <div class="popup-match-detail">
+          <div class="popup-match-name">${match.team1.name} vs ${match.team2.name}</div>
+          <div class="popup-match-league">${match.league} • ${tgl}</div>
+        </div>
       </div>
-    </div>
-    <div class="popup-match-info">
-      ${isLive ? '<div class="popup-match-live">● LIVE</div>' : ''}
-      <div class="popup-match-time">${match.kickoff_time}</div>
-    </div>
-  `;
-  item.onclick = () => selectMatch(match);
-  popupList.appendChild(item);
-});
+      <div class="popup-match-info">
+        ${isLive ? '<div class="popup-match-live">● LIVE</div>' : ''}
+        <div class="popup-match-time">${match.kickoff_time}</div>
+      </div>
+    `;
+    item.onclick = () => selectMatch(match);
+    popupList.appendChild(item);
+  });
+}
 
 // PILIH MATCH -> MUNCULIN PILIHAN CH
 function selectMatch(match) {
