@@ -1,0 +1,128 @@
+:root {
+  --bg: #0a0a0f;
+  --card: #15151f;
+  --primary: #3b82f6;
+  --text: #e5e5e5;
+  --border: #2a2a3a;
+  --yellow: #facc15;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+.header {
+  background: var(--card);
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.logo { font-size: 22px; font-weight: 800; color: var(--yellow); }
+.header-icons { display: flex; gap: 16px; font-size: 20px; }
+
+.player-wrap { position: relative; background: #000; }
+.video-container { position: relative; padding-top: 56.25%; }
+#video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+.scoreboard {
+  position: absolute; top: 8px; left: 8px;
+  background: rgba(0,0,0,0.7); padding: 4px 10px;
+  border-radius: 4px; font-size: 14px; font-weight: 600;
+}
+.live-badge {
+  position: absolute; top: 8px; right: 8px;
+  background: #ef4444; padding: 2px 8px;
+  border-radius: 4px; font-size: 12px; font-weight: 700;
+}
+
+/* CSS BARU BUAT FILTER LIGA */
+.league-filter {
+  display: flex; overflow-x: auto; gap: 8px;
+  padding: 10px; background: var(--card);
+  border-bottom: 1px solid var(--border);
+}
+.league-filter::-webkit-scrollbar { display: none; }
+.league-btn {
+  flex: 0 0 auto; background: var(--bg);
+  border: 1px solid var(--border); padding: 6px 14px;
+  border-radius: 20px; font-size: 12px; font-weight: 700;
+  cursor: pointer; white-space: nowrap;
+}
+.league-btn.active { background: var(--primary); border-color: var(--primary); }
+
+.match-bar {
+  display: flex; overflow-x: auto; gap: 8px;
+  padding: 10px; background: var(--card);
+  border-bottom: 1px solid var(--border);
+  min-height: 54px;
+}
+.match-bar::-webkit-scrollbar { display: none; }
+.match-item {
+  flex: 0 0 auto; display: flex; align-items: center;
+  gap: 8px; background: var(--bg); padding: 6px 12px;
+  border-radius: 8px; border: 1px solid var(--border);
+  font-size: 13px; cursor: pointer;
+}
+.match-item.active { border-color: var(--primary); background: #1e293b; }
+.match-item img { width: 20px; height: 20px; }
+.match-item.live { color: #ef4444; font-weight: 700; }
+
+.tabs {
+  display: flex; background: var(--card);
+  border-bottom: 1px solid var(--border);
+}
+.tab {
+  flex: 1; padding: 12px; text-align: center;
+  font-weight: 600; cursor: pointer; font-size: 14px;
+}
+.tab.active { color: var(--primary); border-bottom: 2px solid var(--primary); }
+
+.notice {
+  background: #1e293b; padding: 10px 16px;
+  font-size: 13px; border-bottom: 1px solid var(--border);
+}
+.notice a { color: var(--primary); }
+
+.system-msg {
+  background: #422006; color: var(--yellow);
+  padding: 10px 16px; font-size: 13px;
+  border-bottom: 1px solid var(--border);
+}
+
+.chat-box { padding: 8px 0; }
+.chat-msg {
+  padding: 6px 16px; font-size: 14px;
+  display: flex; gap: 8px; align-items: start;
+}
+.chat-lv {
+  font-size: 11px; padding: 1px 6px; border-radius: 4px;
+  font-weight: 700; flex-shrink: 0;
+}
+.lv1 { background: #4b5563; }
+.lv2 { background: #059669; }
+.lv3 { background: #2563eb; }
+.lv5 { background: #dc2626; }
+.chat-name { font-weight: 600; color: #60a5fa; }
+.chat-text { word-break: break-word; }
+
+.chat-input {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  display: flex; padding: 8px; background: var(--card);
+  border-top: 1px solid var(--border); gap: 8px;
+}
+.chat-input input {
+  flex: 1; background: var(--bg); border: 1px solid var(--border);
+  color: var(--text); padding: 10px 14px; border-radius: 20px;
+  outline: none;
+}
+.chat-input button {
+  background: var(--primary); border: none; color: #fff;
+  padding: 10px 20px; border-radius: 20px; font-weight: 700;
+  cursor: pointer;
+}
+.chat-container { padding-bottom: 70px; }
