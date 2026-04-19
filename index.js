@@ -201,6 +201,9 @@ setTimeout(updateScrollButtons, 100);
 
 
 
-// Init
+// INIT - PALING BAWAH SCRIPT.JS
 renderLeagueBar();
-openPopup('LIVE');
+
+// Auto play match pertama yang live
+const firstLive = MATCHES.find(m => m.stream_url);
+if (firstLive) selectMatch(firstLive);
