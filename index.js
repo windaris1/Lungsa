@@ -95,4 +95,89 @@ function getKickoffTimestamp(match) {
   return new Date(`${match.kickoff_date}T${match.kickoff_time}:00+07:00`).getTime();
 }
 
-function
+function formatDate(dateStr) {
+  const d = new Date(dateStr + 'T00:00:00+07:00');
+  return d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short' });
+}
+
+function renderPopupList() {
+  popupList.innerHTML = '';
+  let filteredMatches = [...MATCHES];
+
+  if (activeLeague === 'LIVE') {
+    filteredMatches = MATCHES.filter(m => m.stream_url);
+  } else {
+    filteredMatches = MATCHES.filter(m => m.league === activeLeague);
+  }
+
+  filteredMatches.sort((a, b) => getKickoffTimestamp(a) - getKickoffTimestamp(b));
+
+  if (filteredMatches.length === 0) {
+    popupList.innerHTML = '<div style="padding: 20px; text-align: center; color: #6b7280;">Ga ada match</div>';
+    return;
+  }
+
+  filteredMatches.forEach(match => {
+    const isLive = !!match.stream_url;
+    const item = document.createElement('div');
+    item.className = 'popup-match-item';
+    item.innerHTML = `
+      <div class="popup-match-teams">
+        <img src="${match.team1.logo}">
+        <div>
+          <div>${match.team1.name} vs ${match.team2.name}</div>
+          <div class="popup-match-date">${formatDate(match.kickoff_date)}</div>
+        </div>
+      </div>
+      <div class="popup-match-info">
+        ${isLive? '<div class="popup-match-live">● LIVE</div>' : ''}
+        <div class="popup-match-time">${match.kickoff_time}</div>
+      </div>
+    `;
+    item.onclick = () => selectMatch(match);
+    popupList.appendChild(item);
+  });
+}
+
+// 3. Pilih Match + Play
+function selectMatch(match) {
+  currentMatch = match;
+  closePopup();
+  scoreboard.innerText = `${match.team1.name} vs ${match.team2.name} | ${match.kickoff_time}`;
+  loadStream(match.stream_url);
+}
+
+function loadStream(url) {
+  if (!url) {
+    video.src = '';
+    video.poster = 'https://placehold.co/1280x720/0a0a0f/e5e5e5?text=Belum+Live';
+    return;
+  }
+  video.poster = '';
+  if (Hls.isSupported()) {
+    if (hls) hls.destroy();
+    hls = new Hls();
+    hls.loadSource(url);
+    hls.attachMedia(video);
+  } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    video.src = url;
+  }
+}
+
+// 4. Chat
+function sendChat() {
+  const text = chatInput.value.trim();
+  if (!text) return;
+  const msg = document.createElement('div');
+  msg.className = 'chat-msg';
+  msg.innerHTML = `<span class="chat-lv lv1">Lv1</span><div><span class="chat-name">Guest:</span> <span class="chat-text">${text}</span></div>`;
+  chatBox.appendChild(msg);
+  chatInput.value = '';
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+sendBtn.onclick = sendChat;
+chatInput.onkeydown = (e) => { if (e.key === 'Enter') sendChat(); };
+
+// Init
+renderLeagueBar();
+openPopup('LIVE');
