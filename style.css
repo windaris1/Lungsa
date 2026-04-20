@@ -309,7 +309,7 @@ body {
   word-break: break-word;
 }
 
-/* INPUT CHAT MELAYANG - PALING ATAS */
+/* INPUT CHAT MELAYANG - LOCK PALING ATAS */
 .chat-input-area {
   position: fixed;
   bottom: 0;
@@ -320,7 +320,7 @@ body {
   padding: 8px;
   background: #111;
   border-top: 1px solid #1a1a1a;
-  z-index: 9999;
+  z-index: 99999 !important;
 }
 
 #chat-name {
@@ -359,16 +359,17 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0; /* HAPUS PADDING TEKS */
+  padding: 0;
 }
 
 #chat-send svg {
-  margin-left: 2px; /* BIAR ICON GA TERLALU TENGAH */
+  margin-left: 2px;
 }
 
 #chat-send:active {
   background: #2563eb;
 }
+
 /* POPUP JADWAL - FIX HEIGHT + SCROLL SENDIRI */
 .match-popup-overlay {
   position: fixed;
@@ -377,7 +378,7 @@ body {
   right: 0;
   bottom: 0;
   background: rgba(0,0,0,0.6);
-  z-index: 9997;
+  z-index: 9990 !important;
   display: none;
 }
 
@@ -393,7 +394,7 @@ body {
   max-height: 60vh;
   transform: translateY(100%);
   transition: transform 0.3s ease;
-  z-index: 9998;
+  z-index: 9991 !important;
   display: flex;
   flex-direction: column;
 }
