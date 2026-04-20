@@ -48,19 +48,90 @@
   <div class="notice"><b>Pilih Pertandingan Diatas Untuk Mulai Menonton</b></div>
   <div class="system-msg"><b>Download Apk Sibal TV </b>Gratis ✅</div>
 
-  <div class="chat-container">
-    <div class="chat-box" id="chatBox">
-      <div class="chat-msg">
-        <span class="chat-lv lv5">Lv5</span>
-        <div><span class="chat-name">win and lose:</span> <span class="chat-text">MẤY LOL INDO DIỄN GHÊ LẮM</span></div>
-      </div>
-    </div>
+  
+<!-- Chat Box -->
+<div class="chat-wrapper">
+  <div class="chat-box" id="chatBox"></div>
+  <div class="chat-input-area">
+    <input type="text" id="chat-name" placeholder="Nama" maxlength="12">
+    <input type="text" id="chat-msg" placeholder="Ketik pesan...">
+    <button id="chat-send">Kirim</button>
   </div>
+</div>
 
-  <div class="chat-input">
-    <input type="text" id="chatInput" placeholder="Đăng nhập để cùng chat nhé ~~">
-    <button id="sendBtn">GỬI</button>
-  </div>
+<!-- Firebase v8 -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+<script>
+  // INDEX CHATTING
+  const firebaseConfig = {
+    apiKey: "AIzaSyDkZDZfkueidOiRB1hPBUSXhhBJICGj-C4",
+    authDomain: "sibaltv.firebaseapp.com",
+    databaseURL: "https://sibaltv-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "sibaltv",
+    storageBucket: "sibaltv.firebasestorage.app",
+    messagingSenderId: "625753841479",
+    appId: "1:625753841479:web:e6281e31fdcc5deddd3662"
+  };
+
+  const ADMIN_NAMES = ["Admin", "SibalTV"];
+  const USER_COLORS = ['#14b8a6', '#22c55e', '#eab308', '#ef4444', '#a855f7', '#ec4899', '#3b82f6', '#f97316'];
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database().ref('sibaltv_chat');
+
+  const msgInput = document.getElementById('chat-msg');
+  const nameInput = document.getElementById('chat-name');
+  const sendBtn = document.getElementById('chat-send');
+  const chatBox = document.getElementById('chatBox');
+
+  // SIMPEN NAMA
+  nameInput.value = localStorage.getItem('chatName') || '';
+  nameInput.onchange = () => localStorage.setItem('chatName', nameInput.value);
+
+  // WARNA BERDASAR NAMA
+  function getUserColor(name) {
+    if (ADMIN_NAMES.includes(name)) return '#f59e0b';
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return USER_COLORS[Math.abs(hash) % USER_COLORS.length];
+  }
+
+  // LOAD CHAT REALTIME
+  db.limitToLast(50).on('child_added', (data) => {
+    const msg = data.val();
+    const isAdmin = ADMIN_NAMES.includes(msg.name);
+    const color = getUserColor(msg.name);
+    
+    const el = document.createElement('div');
+    el.className = 'chat-msg';
+    el.innerHTML = `
+      ${isAdmin ? '<span class="chat-badge">Lv5</span>' : ''}
+      <span class="chat-name" style="color:${color}">${msg.name}:</span> 
+      <span class="chat-text">${msg.text}</span>
+    `;
+    chatBox.appendChild(el);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  });
+
+  // KIRIM PESAN
+  function sendChat() {
+    const name = nameInput.value.trim() || 'Anon';
+    const text = msgInput.value.trim();
+    if (!text) return;
+    db.push({
+      name: name,
+      text: text,
+      time: Date.now()
+    });
+    msgInput.value = '';
+  }
+
+  sendBtn.onclick = sendChat;
+  msgInput.onkeydown = (e) => { if (e.key === 'Enter') sendChat(); };
+</script>
 
   <div class="match-popup-overlay" id="popupOverlay"></div>
   <div class="match-popup" id="matchPopup">
