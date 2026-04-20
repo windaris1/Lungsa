@@ -132,8 +132,8 @@ db.limitToLast(50).on('child_added', (data) => {
       <div class="chat-text">${msg.text}</div>
     </div>
   `;
-  chatBox.appendChild(el);
-  chatBox.scrollTop = chatBox.scrollHeight;
+
+chatBox.prepend(el); // prepend = masukin ke atas
 });
 
   function sendChat() {
