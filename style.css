@@ -256,8 +256,8 @@ body {
   gap: 6px;
   padding: 8px;
   padding-bottom: calc(8px + env(safe-area-inset-bottom));
-  background: #0a0a0f;
-  border-top: 1px solid #2f3545;
+  background: #15151f;
+  border-top: 1px solid #0a0a0f;
   z-index: 999999;
   height: var(--chat-height);
 }
