@@ -41,15 +41,13 @@ function isMatchLive(match) {
   return now >= start && now <= end;
 }
 
-// FILTER DIUBAH: JANGAN BUANG MATCH YANG BELUM MAIN
 function filterActiveMatches() {
   const now = new Date();
   MATCHES = ALL_MATCHES.filter(m => {
     const end = new Date(`${m.kickoff_date}T${m.kickoff_time}:00`);
     end.setMinutes(end.getMinutes() + m.duration);
-    return now <= end; // TAMPILIN KALO BELUM SELESAI AJA
+    return now <= end;
   });
-  console.log('Match aktif:', MATCHES.length);
 }
 
 function renderLeagueBar() {
@@ -127,7 +125,6 @@ function renderPopupList() {
           <div class="popup-match-name">${match.team1.name} vs ${match.team2.name}</div>
           <div class="popup-match-league">${match.league} • ${tgl}</div>
         </div>
-      </div>
       <div class="popup-match-info">
         ${isLive ? '<div class="popup-match-live">● LIVE</div>' : ''}
         <div class="popup-match-time">${match.kickoff_time}</div>
@@ -176,15 +173,11 @@ function loadChannel(url, name) {
 }
 
 async function init() {
-  console.log('Init start...');
   try {
     const res = await fetch('matches.json');
-    console.log('Fetch matches.json status:', res.status);
     if (!res.ok) throw new Error('matches.json 404');
     
     ALL_MATCHES = await res.json();
-    console.log('Total data:', ALL_MATCHES.length, ALL_MATCHES);
-    
     renderLeagueBar();
     
     const firstLive = MATCHES.find(m => isMatchLive(m));
@@ -209,7 +202,96 @@ async function init() {
 
   } catch (err) {
     console.error('INIT GAGAL:', err);
-    leagueBar.innerHTML = `<div style="padding:12px; color:#ef4444; font-size:12px;">Gagal load: ${err.message}. Cek matches.json</div>`;
+    leagueBar.innerHTML = `<div style="padding:12px; color:#ef4444; font-size:12px;">Gagal load: ${err.message}</div>`;
   }
 }
+
+// FIREBASE CHAT
+const firebaseConfig = {
+  apiKey: "AIzaSyDkZDZfkueidOiRB1hPBUSXhhBJICGj-C4",
+  authDomain: "sibaltv.firebaseapp.com",
+  databaseURL: "https://sibaltv-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "sibaltv",
+  storageBucket: "sibaltv.firebasestorage.app",
+  messagingSenderId: "625753841479",
+  appId: "1:625753841479:web:e6281e31fdcc5deddd3662"
+};
+
+const ADMIN_NAMES = ["Admin", "SibalTV"];
+const USER_COLORS = ['#14b8a6', '#22c55e', '#eab308', '#ef4444', '#a855f7', '#ec4899', '#3b82f6', '#f97316'];
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database().ref('sibaltv_chat');
+
+const msgInput = document.getElementById('chat-msg');
+const nameInput = document.getElementById('chat-name');
+const sendBtn = document.getElementById('chat-send');
+const chatBox = document.getElementById('chatBox');
+
+nameInput.value = localStorage.getItem('chatName') || '';
+nameInput.onchange = () => localStorage.setItem('chatName', nameInput.value);
+
+function getUserColor(name) {
+  if (ADMIN_NAMES.includes(name)) return '#f59e0b';
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return USER_COLORS[Math.abs(hash) % USER_COLORS.length];
+}
+
+function formatTime(timestamp) {
+  const date = new Date(timestamp);
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  return `${hours}.${minutes} WIB`;
+}
+
+db.limitToLast(50).on('child_added', (data) => {
+  const msg = data.val();
+  if (!msg || !msg.name || !msg.text) return;
+  
+  const isAdmin = ADMIN_NAMES.includes(msg.name);
+  const color = getUserColor(msg.name);
+  const initial = msg.name.charAt(0).toUpperCase();
+  const time = msg.time ? formatTime(msg.time) : '';
+  
+  const el = document.createElement('div');
+  el.className = 'chat-msg';
+  el.innerHTML = `
+    <div class="chat-avatar" style="background:${color}">${initial}</div>
+    <div class="chat-content">
+      <div class="chat-header">
+        <span class="chat-name" style="color:${color}">
+          ${isAdmin ? '⭐ ' : ''}${msg.name}
+        </span>
+        <span class="chat-time">${time}</span>
+      </div>
+      <div class="chat-text">${msg.text}</div>
+    </div>
+  `;
+
+  chatBox.prepend(el);
+});
+
+function sendChat() {
+  const name = nameInput.value.trim() || 'Anon';
+  const text = msgInput.value.trim();
+  if (!text) return;
+  
+  db.push({
+    name: name,
+    text: text,
+    time: Date.now()
+  }).then(() => {
+    msgInput.value = '';
+  }).catch((error) => {
+    console.error('GAGAL KIRIM:', error);
+    alert('Gagal kirim chat: ' + error.message);
+  });
+}
+
+sendBtn.onclick = sendChat;
+msgInput.onkeydown = (e) => { if (e.key === 'Enter') sendChat(); };
+
 init();
