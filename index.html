@@ -59,11 +59,11 @@
   </div>
 </div>
 
-<!-- Firebase v8 -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 <script>
-  // INDEX CHATTING
+  console.log('1. Firebase mulai init...');
+  
   const firebaseConfig = {
     apiKey: "AIzaSyDkZDZfkueidOiRB1hPBUSXhhBJICGj-C4",
     authDomain: "sibaltv.firebaseapp.com",
@@ -79,17 +79,19 @@
 
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database().ref('sibaltv_chat');
+  console.log('2. Firebase connect sukses');
 
   const msgInput = document.getElementById('chat-msg');
   const nameInput = document.getElementById('chat-name');
   const sendBtn = document.getElementById('chat-send');
   const chatBox = document.getElementById('chatBox');
 
-  // SIMPEN NAMA
+  if (!sendBtn) console.error('ERROR: Tombol #chat-send ga ketemu!');
+  if (!msgInput) console.error('ERROR: Input #chat-msg ga ketemu!');
+
   nameInput.value = localStorage.getItem('chatName') || '';
   nameInput.onchange = () => localStorage.setItem('chatName', nameInput.value);
 
-  // WARNA BERDASAR NAMA
   function getUserColor(name) {
     if (ADMIN_NAMES.includes(name)) return '#f59e0b';
     let hash = 0;
@@ -99,9 +101,14 @@
     return USER_COLORS[Math.abs(hash) % USER_COLORS.length];
   }
 
-  // LOAD CHAT REALTIME
   db.limitToLast(50).on('child_added', (data) => {
     const msg = data.val();
+    console.log('3. Pesan masuk:', msg);
+    if (!msg || !msg.name || !msg.text) {
+      console.warn('Skip data rusak:', msg);
+      return;
+    }
+    
     const isAdmin = ADMIN_NAMES.includes(msg.name);
     const color = getUserColor(msg.name);
     
@@ -114,19 +121,27 @@
     `;
     chatBox.appendChild(el);
     chatBox.scrollTop = chatBox.scrollHeight;
+  }, (error) => {
+    console.error('ERROR BACA DATABASE:', error);
   });
 
-  // KIRIM PESAN
   function sendChat() {
     const name = nameInput.value.trim() || 'Anon';
     const text = msgInput.value.trim();
+    console.log('4. Mencoba kirim:', name, text);
     if (!text) return;
+    
     db.push({
       name: name,
       text: text,
       time: Date.now()
+    }).then(() => {
+      console.log('5. Kirim sukses');
+      msgInput.value = '';
+    }).catch((error) => {
+      console.error('GAGAL KIRIM:', error);
+      alert('Gagal kirim chat: ' + error.message);
     });
-    msgInput.value = '';
   }
 
   sendBtn.onclick = sendChat;
