@@ -27,8 +27,55 @@
     "duration": 120,
   "channels": [
       { "name": "CH 1 - SD", "url": "https://example.com/stream/12345" },
-      { "name": "CH 2 - HD", "url": "https://pluyer.pages.dev/?shaka=bein3aus" },
-      { "name": "CH 3 - Backup", "url": "https://example.com/stream/12347" }
+      { "name": "CH 2 - HD", "url": "https://pluyer.pages.dev/?shaka=bein3aus" }
+    ]
+    },
+
+  {
+    "id": "Persik-Persita",
+    "sport": "football",
+    "league": "Serie A",
+    "league_logo": "https://static.flashscore.com/res/image/data/rFHMayEO-2exwJQks.png",
+    "team1": { "name": "Persik Kediri" },
+    "team2": { "name": "Persita" },
+    "kickoff_date": "2026-04-20",
+    "kickoff_time": "17:30",
+    "duration": 120,
+  "channels": [
+      { "name": "CH 1 - SD", "url": "https://example.com/stream/12345" },
+      { "name": "CH 2 - HD", "url": "https://pluyer.pages.dev/?shaka=bein3aus" }
+    ]
+    },
+
+  {
+    "id": "Persik-Persita",
+    "sport": "football",
+    "league": "Serie A",
+    "league_logo": "https://static.flashscore.com/res/image/data/rFHMayEO-2exwJQks.png",
+    "team1": { "name": "Persik Kediri" },
+    "team2": { "name": "Persita" },
+    "kickoff_date": "2026-04-20",
+    "kickoff_time": "17:30",
+    "duration": 120,
+  "channels": [
+      { "name": "CH 1 - SD", "url": "https://example.com/stream/12345" },
+      { "name": "CH 2 - HD", "url": "https://pluyer.pages.dev/?shaka=bein3aus" }
+    ]
+    },
+
+  {
+    "id": "Persik-Persita",
+    "sport": "football",
+    "league": "Serie A",
+    "league_logo": "https://static.flashscore.com/res/image/data/rFHMayEO-2exwJQks.png",
+    "team1": { "name": "Persik Kediri" },
+    "team2": { "name": "Persita" },
+    "kickoff_date": "2026-04-20",
+    "kickoff_time": "17:30",
+    "duration": 120,
+  "channels": [
+      { "name": "CH 1 - SD", "url": "https://example.com/stream/12345" },
+      { "name": "CH 2 - HD", "url": "https://pluyer.pages.dev/?shaka=bein3aus" }
     ]
     }
 ]
