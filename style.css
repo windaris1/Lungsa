@@ -181,7 +181,7 @@ body {
 }
 
 .chat-wrapper {
-  background: #0a0a0c;
+  background: #1a1f2e;
   display: flex;
   flex-direction: column;
   height: calc(100vh - 380px);
