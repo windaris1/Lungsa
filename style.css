@@ -309,7 +309,7 @@ body {
   word-break: break-word;
 }
 
-/* INPUT CHAT MELAYANG - LOCK PALING ATAS */
+/* INPUT CHAT - LOCK PALING ATAS PAKE LAYER SENDIRI */
 .chat-input-area {
   position: fixed;
   bottom: 0;
@@ -318,9 +318,12 @@ body {
   display: flex;
   gap: 6px;
   padding: 8px;
+  padding-bottom: calc(8px + env(safe-area-inset-bottom));
   background: #111;
   border-top: 1px solid #1a1a1a;
-  z-index: 99999 !important;
+  z-index: 2147483647;
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 #chat-name {
@@ -370,7 +373,7 @@ body {
   background: #2563eb;
 }
 
-/* POPUP JADWAL - FIX HEIGHT + SCROLL SENDIRI */
+/* POPUP JADWAL - NAIK 70PX DARI BAWAH BIAR GA NIBAN INPUT */
 .match-popup-overlay {
   position: fixed;
   top: 0;
@@ -378,7 +381,7 @@ body {
   right: 0;
   bottom: 0;
   background: rgba(0,0,0,0.6);
-  z-index: 9990 !important;
+  z-index: 9989;
   display: none;
 }
 
@@ -386,15 +389,15 @@ body {
 
 .match-popup {
   position: fixed;
-  bottom: 60px;
+  bottom: 70px;
   left: 0;
   right: 0;
   background: #111;
   border-radius: 16px 16px 0 0;
-  max-height: 60vh;
+  max-height: calc(60vh - 70px);
   transform: translateY(100%);
   transition: transform 0.3s ease;
-  z-index: 9991 !important;
+  z-index: 9990;
   display: flex;
   flex-direction: column;
 }
