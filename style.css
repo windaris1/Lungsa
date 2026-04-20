@@ -12,8 +12,41 @@ body {
   padding-bottom: var(--chat-height);
 }
 
-.player-wrap { position: relative; background: #000; margin-bottom: 0; }
-.video-container { position: relative; padding-top: 56.25%; line-height: 0; background: #000; }
+/* LAYOUT PC: 2 KOLOM */
+.main-layout {
+  display: flex;
+  height: 100vh;
+}
+
+.left-sidebar {
+  width: 380px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.right-sidebar {
+  flex: 1;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+}
+
+.player-wrap { 
+  position: relative; 
+  background: #000; 
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.video-container { 
+  position: relative; 
+  padding-top: 56.25%; 
+  line-height: 0; 
+  background: #000; 
+  flex-shrink: 0;
+}
 #playerFrame { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
 .scoreboard { position: absolute; top: 8px; left: 8px; background: rgba(0,0,0,0.7); padding: 4px 10px; border-radius: 4px; font-size: 14px; font-weight: 600; line-height: normal; }
 .live-badge { position: absolute; top: 8px; right: 8px; background: var(--red); padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 700; line-height: normal; }
@@ -82,12 +115,25 @@ body {
   border: 1px solid rgba(255,255,255,0.1);
 }
 
-.channel-select-bar { background: var(--card); border-bottom: 1px solid var(--border); display: flex; gap: 8px; padding: 8px 12px; overflow-x: auto; }
+.channel-select-bar { 
+  background: var(--card); 
+  border-top: 1px solid var(--border); 
+  display: flex; 
+  gap: 8px; 
+  padding: 8px 12px; 
+  overflow-x: auto;
+  flex-shrink: 0;
+}
 .channel-select-bar::-webkit-scrollbar { display: none; }
 .channel-btn { flex-shrink: 0; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; }
 .channel-btn.active { background: var(--blue); border-color: var(--blue); }
 
-.league-bar-wrapper { position: relative; background: var(--card); border-bottom: 1px solid var(--border); }
+.league-bar-wrapper { 
+  position: relative; 
+  background: var(--card); 
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
 .league-bar { 
   display: flex; 
   overflow-x: auto; 
@@ -170,6 +216,7 @@ body {
   border-bottom: 1px solid var(--border);
   text-align: center;
   text-transform: uppercase;
+  flex-shrink: 0;
 }
 .notice a { 
   color: var(--blue); 
@@ -181,12 +228,11 @@ body {
 }
 
 .chat-wrapper {
-  background: #15151f;
+  background: #0a0a0c;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 380px);
-  min-height: 250px;
-  position: relative;
+  flex: 1;
+  min-height: 0;
 }
 
 .chat-box {
@@ -256,16 +302,16 @@ body {
   gap: 6px;
   padding: 8px;
   padding-bottom: calc(8px + env(safe-area-inset-bottom));
-  background: #15151f;
-  border-top: 1px solid #2a2a3a;
+  background: #111;
+  border-top: 1px solid #1a1a1a;
   z-index: 999999;
   height: var(--chat-height);
 }
 
 #chat-name {
   width: 75px;
-  background: #0a0a0f;
-  border: 1px solid #2a2a3a;
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
   border-radius: 20px;
   padding: 10px 12px;
   color: #fff;
@@ -274,8 +320,8 @@ body {
 
 #chat-msg {
   flex: 1;
-  background: #0a0a0f;
-  border: 1px solid #2a2a3a;
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
   border-radius: 20px;
   padding: 10px 16px;
   color: #fff;
@@ -288,10 +334,9 @@ body {
 }
 
 #chat-send {
-  background: #0a0a0f;
+  background: #3b82f6;
   border: none;
   border-radius: 50%;
-  border: 1px solid #2a2a3a;
   width: 42px;
   height: 42px;
   color: #fff;
@@ -380,3 +425,29 @@ body {
 .popup-match-info { text-align: right; font-size: 13px; }
 .popup-match-time { color: var(--blue); font-weight: 700; }
 .popup-match-live { color: var(--red); font-weight: 700; font-size: 12px; }
+
+/* MOBILE: STACK 1 KOLOM */
+@media (max-width: 768px) {
+  .main-layout {
+    flex-direction: column;
+    height: auto;
+  }
+  
+  .left-sidebar {
+    width: 100%;
+    border-right: none;
+  }
+  
+  .right-sidebar {
+    width: 100%;
+  }
+  
+  .chat-wrapper {
+    height: calc(100vh - 380px);
+    min-height: 250px;
+  }
+  
+  .video-container {
+    padding-top: 56.25%;
+  }
+}
