@@ -115,10 +115,11 @@
     const el = document.createElement('div');
     el.className = 'chat-msg';
     el.innerHTML = `
-      ${isAdmin ? '<span class="chat-badge">Lv5</span>' : ''}
-      <span class="chat-name" style="color:${color}">${msg.name}:</span> 
-      <span class="chat-text">${msg.text}</span>
-    `;
+  <span class="chat-name" style="color:${color}">
+    ${isAdmin ? '⭐ ' : ''}${msg.name}:
+  </span> 
+  <span class="chat-text">${msg.text}</span>
+`;
     chatBox.appendChild(el);
     chatBox.scrollTop = chatBox.scrollHeight;
   }, (error) => {
