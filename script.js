@@ -23,6 +23,7 @@ const popupClose = document.getElementById('popupClose');
 const scrollLeftBtn = document.getElementById('scrollLeft');
 const scrollRightBtn = document.getElementById('scrollRight');
 const channelSelectBar = document.getElementById('channelSelectBar');
+const playerPoster = document.getElementById('playerPoster');
 let activeLeague = 'LIVE';
 
 function isMatchLive(match) {
@@ -45,7 +46,7 @@ function renderLeagueBar() {
   filterActiveMatches();
   leagueBar.innerHTML = '';
   const liveCount = MATCHES.filter(m => isMatchLive(m)).length;
-  
+
   const liveBtn = document.createElement('div');
   liveBtn.className = 'league-item';
   liveBtn.dataset.league = 'LIVE';
@@ -91,7 +92,6 @@ function closePopup() {
 popupOverlay.onclick = closePopup;
 popupClose.onclick = closePopup;
 
-
 function renderPopupList() {
   filterActiveMatches();
   popupList.innerHTML = '';
@@ -128,12 +128,13 @@ function renderPopupList() {
   });
 }
 
-// PILIH MATCH -> MUNCULIN PILIHAN CH
+// PILIH MATCH -> MUNCULIN PILIHAN CH + HIDE POSTER
 function selectMatch(match) {
   closePopup();
   currentMatch = match;
   scoreboard.innerText = `${match.team1.name} vs ${match.team2.name} | ${match.kickoff_time}`;
   renderChannelButtons(match.channels);
+  playerPoster.classList.add('hide'); // SEMBUNYIIN POSTER
   // AUTO PLAY CH PERTAMA
   if (match.channels.length > 0) {
     loadChannel(match.channels[0].url, match.channels[0].name);
@@ -190,7 +191,12 @@ async function init() {
     ALL_MATCHES = await res.json();
     renderLeagueBar();
     const firstLive = MATCHES.find(m => isMatchLive(m));
-    if (firstLive) selectMatch(firstLive);
+    if (firstLive) {
+      selectMatch(firstLive);
+    } else {
+      playerPoster.classList.remove('hide'); // TAMPILIN POSTER KALO GA ADA LIVE
+      scoreboard.innerText = 'Pilih match dulu';
+    }
     
     setInterval(() => {
       renderLeagueBar();
@@ -199,6 +205,7 @@ async function init() {
       if (currentMatch && !isMatchLive(currentMatch)) {
         playerFrame.src = '';
         channelSelectBar.style.display = 'none';
+        playerPoster.classList.remove('hide'); // MUNCULIN POSTER LAGI
         scoreboard.innerText = 'Jadwal habis';
         currentMatch = null;
       }
