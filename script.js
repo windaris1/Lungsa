@@ -141,6 +141,15 @@ function selectMatch(match) {
   }
 }
 
+const logoBtn = document.getElementById('logoBtn');
+const reloadBtn = document.getElementById('reloadBtn');
+function reloadPage() {
+  location.reload();
+}
+
+logoBtn.onclick = reloadPage;
+reloadBtn.onclick = reloadPage;
+
 // RENDER TOMBOL CH 1, CH 2, CH 3
 function renderChannelButtons(channels) {
   channelSelectBar.innerHTML = '';
