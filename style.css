@@ -14,14 +14,15 @@ body {
   height: 100vh;
 }
 
-/* LAYOUT DEFAULT: 50-50 FULL TINGGI PC + MOBILE */
+/* LAYOUT DEFAULT: FULL LAYAR */
 .main-layout {
   display: flex;
   height: calc(100vh - var(--chat-height));
+  flex-direction: row;
 }
 
 .left-sidebar {
-  width: 50%;
+  width: 60%;
   background: #000;
   display: flex;
   flex-direction: column;
@@ -29,10 +30,11 @@ body {
 }
 
 .right-sidebar {
-  width: 50%;
+  width: 40%;
   display: flex;
   flex-direction: column;
   background: var(--bg);
+  min-height: 0;
 }
 
 .player-wrap { 
@@ -41,6 +43,7 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
+  min-height: 0;
 }
 .video-container { 
   position: relative; 
@@ -235,15 +238,18 @@ body {
   flex-direction: column;
   flex: 1;
   min-height: 0;
+  overflow: hidden;
 }
 
 .chat-box {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 12px 10px 8px 10px;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  -webkit-overflow-scrolling: touch;
 }
 
 .chat-msg {
@@ -428,15 +434,24 @@ body {
 .popup-match-time { color: var(--blue); font-weight: 700; }
 .popup-match-live { color: var(--red); font-weight: 700; font-size: 12px; }
 
-/* MOBILE: TETEP 50-50, GA STACK LAGI */
+/* MOBILE: STACK ATAS BAWAH TAPI FULL LAYAR */
 @media (max-width: 768px) {
+  .main-layout {
+    flex-direction: column;
+  }
+  
   .left-sidebar {
-    width: 50%;
-    border-right: 1px solid var(--border);
+    width: 100%;
+    height: 45%;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
   }
   
   .right-sidebar {
-    width: 50%;
+    width: 100%;
+    height: 55%;
+    flex: 1;
   }
   
   .video-container {
