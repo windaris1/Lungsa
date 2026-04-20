@@ -2,13 +2,14 @@
   --bg: #0a0a0f; --card: #15151f; --primary: #3b82f6;
   --text: #e5e5e5; --border: #2a2a3a; --yellow: #facc15;
   --red: #ef4444; --blue: #3b82f6;
+  --chat-height: 58px;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { 
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
   background: var(--bg); 
   color: var(--text); 
-  padding-bottom: 60px;
+  padding-bottom: var(--chat-height);
 }
 
 .header {
@@ -134,13 +135,11 @@ body {
   border: 1px solid rgba(255,255,255,0.1);
 }
 
-/* CHANNEL SELECT BAR */
 .channel-select-bar { background: var(--card); border-bottom: 1px solid var(--border); display: flex; gap: 8px; padding: 8px 12px; overflow-x: auto; }
 .channel-select-bar::-webkit-scrollbar { display: none; }
 .channel-btn { flex-shrink: 0; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; }
 .channel-btn.active { background: var(--blue); border-color: var(--blue); }
 
-/* LEAGUE BAR SPORT */
 .league-bar-wrapper { position: relative; background: var(--card); border-bottom: 1px solid var(--border); }
 .league-bar { 
   display: flex; 
@@ -217,11 +216,6 @@ body {
   border-color: var(--border);
 }
 
-/* TABS & NOTICE */
-.tabs { display: flex; background: var(--card); border-bottom: 1px solid var(--border); }
-.tab { flex: 1; padding: 12px 8px; text-align: center; font-weight: 700; cursor: pointer; font-size: 13px; }
-.tab.active { color: var(--blue); border-bottom: 2px solid var(--blue); }
-
 .notice { 
   background: #1e293b; 
   padding: 10px 16px; 
@@ -239,9 +233,6 @@ body {
   text-decoration: underline;
 }
 
-.system-msg { background: #422006; color: var(--yellow); padding: 10px 16px; font-size: 13px; border-bottom: 1px solid var(--border); }
-
-/* CHAT STYLE WA */
 .chat-wrapper {
   background: #0a0a0c;
   display: flex;
@@ -309,7 +300,7 @@ body {
   word-break: break-word;
 }
 
-/* INPUT CHAT - LOCK PALING ATAS PAKE LAYER SENDIRI */
+/* INPUT CHAT - TINGGI 58PX, Z-INDEX MAX */
 .chat-input-area {
   position: fixed;
   bottom: 0;
@@ -321,9 +312,8 @@ body {
   padding-bottom: calc(8px + env(safe-area-inset-bottom));
   background: #111;
   border-top: 1px solid #1a1a1a;
-  z-index: 2147483647;
-  transform: translateZ(0);
-  will-change: transform;
+  z-index: 999999;
+  height: var(--chat-height);
 }
 
 #chat-name {
@@ -373,7 +363,7 @@ body {
   background: #2563eb;
 }
 
-/* POPUP JADWAL - NAIK 70PX DARI BAWAH BIAR GA NIBAN INPUT */
+/* POPUP - BOTTOM = TINGGI INPUT CHAT */
 .match-popup-overlay {
   position: fixed;
   top: 0;
@@ -381,23 +371,24 @@ body {
   right: 0;
   bottom: 0;
   background: rgba(0,0,0,0.6);
-  z-index: 9989;
+  z-index: 9998;
   display: none;
+  pointer-events: auto;
 }
 
 .match-popup-overlay.show { display: block; }
 
 .match-popup {
   position: fixed;
-  bottom: 70px;
   left: 0;
   right: 0;
+  bottom: var(--chat-height);
   background: #111;
   border-radius: 16px 16px 0 0;
-  max-height: calc(60vh - 70px);
+  height: 55vh;
   transform: translateY(100%);
   transition: transform 0.3s ease;
-  z-index: 9990;
+  z-index: 9998;
   display: flex;
   flex-direction: column;
 }
