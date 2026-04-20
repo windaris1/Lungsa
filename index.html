@@ -12,21 +12,29 @@
     <div class="header-icons"><span>☀️</span><span>🔔</span></div>
   </header>
 
-  <div class="player-wrap">
-    <div class="video-container">
-  <iframe 
-  id="playerFrame" 
-  src="" 
-  frameborder="0" 
-  allowfullscreen
-  allow="autoplay; encrypted-media; fullscreen"
-  sandbox="allow-scripts allow-same-origin allow-forms allow-presentation"
-></iframe>
-    <div class="scoreboard" id="scoreboard">Pilih match dulu</div>
-      <div class="live-badge">● LIVE</div>
+<div class="player-wrap">
+  <div class="video-container">
+    <iframe 
+      id="playerFrame"
+      src=""
+      frameborder="0"
+      allowfullscreen
+      allow="autoplay; encrypted-media; fullscreen"
+      sandbox="allow-scripts allow-same-origin allow-forms allow-presentation"
+    ></iframe>
+    
+    <!-- TAMBAHIN INI -->
+    <div id="playerPoster" class="player-poster">
+      <img src="https://sibaltv.pages.dev/sibco.jpg" alt="Sibal TV">
+      <div>Pilih Pertandingan Dulu...</div>
     </div>
-    <div class="channel-select-bar" id="channelSelectBar" style="display:none;"></div>
+    
+    <div class="scoreboard" id="scoreboard">Pilih match dulu</div>
+    <div class="live-badge">● LIVE</div>
   </div>
+  <div class="channel-select-bar" id="channelSelectBar" style="display:none;"></div>
+</div>
+
 
   <div class="league-bar-wrapper">
     <button class="scroll-btn left" id="scrollLeft">‹</button>
