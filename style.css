@@ -416,13 +416,15 @@ body {
   background: #1e293b; 
   padding: 10px 16px; 
   font-size: 13px; 
-  border-bottom: 1px solid var(--border); 
+  border-bottom: 1px solid var(--border);
+  text-align: center; /* CENTER */
+  text-transform: uppercase; /* CAPITAL SEMUA */
 }
 .notice a { 
   color: var(--blue); 
-  text-decoration: none; /* TAMBAH INI */
-  font-weight: 700; /* BIAR TETEP BOLD */
+  text-decoration: none;
+  font-weight: 700; 
 }
 .notice a:hover {
-  text-decoration: underline; /* Pas di-hover baru ada garis */
+  text-decoration: underline;
 }
