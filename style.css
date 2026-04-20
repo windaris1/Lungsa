@@ -355,18 +355,20 @@ body {
   width: 42px;
   height: 42px;
   color: #fff;
-  font-weight: 600;
-  font-size: 13px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0; /* HAPUS PADDING TEKS */
+}
+
+#chat-send svg {
+  margin-left: 2px; /* BIAR ICON GA TERLALU TENGAH */
 }
 
 #chat-send:active {
   background: #2563eb;
 }
-
 /* POPUP JADWAL - FIX HEIGHT + SCROLL SENDIRI */
 .match-popup-overlay {
   position: fixed;
