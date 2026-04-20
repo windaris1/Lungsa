@@ -11,9 +11,10 @@ body {
   color: var(--text); 
   padding-bottom: var(--chat-height);
   overflow: hidden;
+  height: 100vh;
 }
 
-/* LAYOUT PC: 50-50 FULL TINGGI */
+/* LAYOUT DEFAULT: 50-50 FULL TINGGI PC + MOBILE */
 .main-layout {
   display: flex;
   height: calc(100vh - var(--chat-height));
@@ -427,30 +428,23 @@ body {
 .popup-match-time { color: var(--blue); font-weight: 700; }
 .popup-match-live { color: var(--red); font-weight: 700; font-size: 12px; }
 
-/* MOBILE: STACK VERTIKAL PLAYER DULU */
+/* MOBILE: TETEP 50-50, GA STACK LAGI */
 @media (max-width: 768px) {
-  body { overflow: auto; }
-  
-  .main-layout {
-    flex-direction: column;
-    height: auto;
-  }
-  
   .left-sidebar {
-    width: 100%;
-    border-right: none;
+    width: 50%;
+    border-right: 1px solid var(--border);
   }
   
   .right-sidebar {
-    width: 100%;
-  }
-  
-  .chat-wrapper {
-    height: calc(100vh - 380px);
-    min-height: 250px;
+    width: 50%;
   }
   
   .video-container {
     padding-top: 56.25%;
+  }
+  
+  .chat-wrapper {
+    flex: 1;
+    min-height: 0;
   }
 }
