@@ -12,25 +12,25 @@ body {
   padding-bottom: var(--chat-height);
 }
 
-/* LAYOUT PC: 2 KOLOM */
+/* LAYOUT PC: PLAYER KIRI, MENU KANAN */
 .main-layout {
   display: flex;
   height: 100vh;
 }
 
 .left-sidebar {
-  width: 380px;
-  display: flex;
-  flex-direction: column;
-  border-right: 1px solid var(--border);
-  background: var(--bg);
-}
-
-.right-sidebar {
   flex: 1;
   background: #000;
   display: flex;
   flex-direction: column;
+  border-right: 1px solid var(--border);
+}
+
+.right-sidebar {
+  width: 380px;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
 }
 
 .player-wrap { 
@@ -426,7 +426,7 @@ body {
 .popup-match-time { color: var(--blue); font-weight: 700; }
 .popup-match-live { color: var(--red); font-weight: 700; font-size: 12px; }
 
-/* MOBILE: STACK 1 KOLOM */
+/* MOBILE: STACK VERTIKAL PLAYER DULU */
 @media (max-width: 768px) {
   .main-layout {
     flex-direction: column;
