@@ -88,18 +88,16 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
 .player-poster div {
   position: absolute;
-  top: 12px;        /* GANTI DARI bottom */
-  right: 12px;      /* TAMBAH INI */
-  left: auto;       /* TAMBAH INI BUAT NGAHAPUS translateX */
-  transform: none;  /* TAMBAH INI */
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
   background: rgba(0,0,0,0.7);
   color: #fff;
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 600;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
   backdrop-filter: blur(4px);
-  border: 1px solid rgba(255,255,255,0.1);
 }
 
 /* CHANNEL SELECT BAR */
