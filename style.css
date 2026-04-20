@@ -88,18 +88,21 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
 .player-poster div {
   position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0,0,0,0.7);
+  top: 12px;
+  right: 12px;
+  max-width: 160px; /* BATASIN LEBAR */
+  background: rgba(0,0,0,0.8);
   color: #fff;
-  padding: 10px 8px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 500;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap; /* PAKSA 1 BARIS */
+  overflow: hidden;
+  text-overflow: ellipsis; /* KALO KEPANJANGAN JADI... */
   backdrop-filter: blur(4px);
+  border: 1px solid rgba(255,255,255,0.1);
 }
-
 /* CHANNEL SELECT BAR */
 .channel-select-bar { background: var(--card); border-bottom: 1px solid var(--border); display: flex; gap: 8px; padding: 8px 12px; overflow-x: auto; }
 .channel-select-bar::-webkit-scrollbar { display: none; }
