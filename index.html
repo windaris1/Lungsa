@@ -101,30 +101,40 @@
     return USER_COLORS[Math.abs(hash) % USER_COLORS.length];
   }
 
-  db.limitToLast(50).on('child_added', (data) => {
-    const msg = data.val();
-    console.log('3. Pesan masuk:', msg);
-    if (!msg || !msg.name || !msg.text) {
-      console.warn('Skip data rusak:', msg);
-      return;
-    }
-    
-    const isAdmin = ADMIN_NAMES.includes(msg.name);
-    const color = getUserColor(msg.name);
-    
-    const el = document.createElement('div');
-    el.className = 'chat-msg';
-    el.innerHTML = `
-  <span class="chat-name" style="color:${color}">
-    ${isAdmin ? '⭐ ' : ''}${msg.name}:
-  </span> 
-  <span class="chat-text">${msg.text}</span>
-`;
-    chatBox.appendChild(el);
-    chatBox.scrollTop = chatBox.scrollHeight;
-  }, (error) => {
-    console.error('ERROR BACA DATABASE:', error);
-  });
+ 
+function formatTime(timestamp) {
+  const date = new Date(timestamp);
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  return `${hours}.${minutes} WIB`;
+}
+
+db.limitToLast(50).on('child_added', (data) => {
+  const msg = data.val();
+  if (!msg || !msg.name || !msg.text) return;
+  
+  const isAdmin = ADMIN_NAMES.includes(msg.name);
+  const color = getUserColor(msg.name);
+  const initial = msg.name.charAt(0).toUpperCase();
+  const time = msg.time ? formatTime(msg.time) : '';
+  
+  const el = document.createElement('div');
+  el.className = 'chat-msg';
+  el.innerHTML = `
+    <div class="chat-avatar" style="background:${color}">${initial}</div>
+    <div class="chat-content">
+      <div class="chat-header">
+        <span class="chat-name" style="color:${color}">
+          ${isAdmin ? '⭐ ' : ''}${msg.name}
+        </span>
+        <span class="chat-time">${time}</span>
+      </div>
+      <div class="chat-text">${msg.text}</div>
+    </div>
+  `;
+  chatBox.appendChild(el);
+  chatBox.scrollTop = chatBox.scrollHeight;
+});
 
   function sendChat() {
     const name = nameInput.value.trim() || 'Anon';
