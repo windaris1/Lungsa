@@ -24,7 +24,15 @@ const scrollLeftBtn = document.getElementById('scrollLeft');
 const scrollRightBtn = document.getElementById('scrollRight');
 const channelSelectBar = document.getElementById('channelSelectBar');
 const playerPoster = document.getElementById('playerPoster');
+const logoBtn = document.getElementById('logoBtn');
+const reloadBtn = document.getElementById('reloadBtn');
 let activeLeague = 'LIVE';
+
+function reloadPage() {
+  location.reload();
+}
+logoBtn.onclick = reloadPage;
+reloadBtn.onclick = reloadPage;
 
 function isMatchLive(match) {
   const start = new Date(`${match.kickoff_date}T${match.kickoff_time}:00`);
@@ -33,13 +41,15 @@ function isMatchLive(match) {
   return now >= start && now <= end;
 }
 
+// FILTER DIUBAH: JANGAN BUANG MATCH YANG BELUM MAIN
 function filterActiveMatches() {
   const now = new Date();
   MATCHES = ALL_MATCHES.filter(m => {
-    const start = new Date(`${m.kickoff_date}T${m.kickoff_time}:00`);
-    const end = new Date(start.getTime() + m.duration * 60000);
-    return now <= end;
+    const end = new Date(`${m.kickoff_date}T${m.kickoff_time}:00`);
+    end.setMinutes(end.getMinutes() + m.duration);
+    return now <= end; // TAMPILIN KALO BELUM SELESAI AJA
   });
+  console.log('Match aktif:', MATCHES.length);
 }
 
 function renderLeagueBar() {
@@ -128,29 +138,17 @@ function renderPopupList() {
   });
 }
 
-// PILIH MATCH -> MUNCULIN PILIHAN CH + HIDE POSTER
 function selectMatch(match) {
   closePopup();
   currentMatch = match;
   scoreboard.innerText = `${match.team1.name} vs ${match.team2.name} | ${match.kickoff_time}`;
   renderChannelButtons(match.channels);
-  playerPoster.classList.add('hide'); // SEMBUNYIIN POSTER
-  // AUTO PLAY CH PERTAMA
+  playerPoster.classList.add('hide');
   if (match.channels.length > 0) {
     loadChannel(match.channels[0].url, match.channels[0].name);
   }
 }
 
-const logoBtn = document.getElementById('logoBtn');
-const reloadBtn = document.getElementById('reloadBtn');
-function reloadPage() {
-  location.reload();
-}
-
-logoBtn.onclick = reloadPage;
-reloadBtn.onclick = reloadPage;
-
-// RENDER TOMBOL CH 1, CH 2, CH 3
 function renderChannelButtons(channels) {
   channelSelectBar.innerHTML = '';
   if (!channels || channels.length === 0) {
@@ -172,57 +170,46 @@ function renderChannelButtons(channels) {
 function loadChannel(url, name) {
   currentChannelUrl = url;
   playerFrame.src = url;
-  // UPDATE TOMBOL ACTIVE
   document.querySelectorAll('.channel-btn').forEach(btn => {
     btn.classList.toggle('active', btn.innerText === name);
   });
 }
 
-const chatInput = document.getElementById('chatInput');
-const sendBtn = document.getElementById('sendBtn');
-const chatBox = document.getElementById('chatBox');
-function sendChat() {
-  const text = chatInput.value.trim();
-  if (!text) return;
-  const msg = document.createElement('div');
-  msg.className = 'chat-msg';
-  msg.innerHTML = `<span class="chat-lv lv1">Lv1</span><div><span class="chat-name">Guest:</span> <span class="chat-text">${text}</span></div>`;
-  chatBox.appendChild(msg);
-  chatInput.value = '';
-  chatBox.scrollTop = chatBox.scrollHeight;
-}
-sendBtn.onclick = sendChat;
-chatInput.onkeydown = (e) => { if (e.key === 'Enter') sendChat(); };
-
 async function init() {
+  console.log('Init start...');
   try {
     const res = await fetch('matches.json');
+    console.log('Fetch matches.json status:', res.status);
+    if (!res.ok) throw new Error('matches.json 404');
+    
     ALL_MATCHES = await res.json();
+    console.log('Total data:', ALL_MATCHES.length, ALL_MATCHES);
+    
     renderLeagueBar();
+    
     const firstLive = MATCHES.find(m => isMatchLive(m));
     if (firstLive) {
       selectMatch(firstLive);
     } else {
-      playerPoster.classList.remove('hide'); // TAMPILIN POSTER KALO GA ADA LIVE
+      playerPoster.classList.remove('hide');
       scoreboard.innerText = 'Pilih match dulu';
     }
-    
+
     setInterval(() => {
       renderLeagueBar();
       if (matchPopup.classList.contains('show')) renderPopupList();
-      // KALO MATCH YANG LAGI DIPUTER UDAH EXPIRED, STOP
       if (currentMatch && !isMatchLive(currentMatch)) {
         playerFrame.src = '';
         channelSelectBar.style.display = 'none';
-        playerPoster.classList.remove('hide'); // MUNCULIN POSTER LAGI
+        playerPoster.classList.remove('hide');
         scoreboard.innerText = 'Jadwal habis';
         currentMatch = null;
       }
     }, 60000);
-    
+
   } catch (err) {
-    console.error('Gagal load matches.json', err);
-    leagueBar.innerHTML = '<div style="padding:12px; color:#ef4444;">Gagal load jadwal</div>';
+    console.error('INIT GAGAL:', err);
+    leagueBar.innerHTML = `<div style="padding:12px; color:#ef4444; font-size:12px;">Gagal load: ${err.message}. Cek matches.json</div>`;
   }
 }
 init();
