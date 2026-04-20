@@ -24,15 +24,7 @@ const scrollLeftBtn = document.getElementById('scrollLeft');
 const scrollRightBtn = document.getElementById('scrollRight');
 const channelSelectBar = document.getElementById('channelSelectBar');
 const playerPoster = document.getElementById('playerPoster');
-const logoBtn = document.getElementById('logoBtn');
-const reloadBtn = document.getElementById('reloadBtn');
 let activeLeague = 'LIVE';
-
-function reloadPage() {
-  location.reload();
-}
-logoBtn.onclick = reloadPage;
-reloadBtn.onclick = reloadPage;
 
 function isMatchLive(match) {
   const start = new Date(`${match.kickoff_date}T${match.kickoff_time}:00`);
@@ -125,6 +117,7 @@ function renderPopupList() {
           <div class="popup-match-name">${match.team1.name} vs ${match.team2.name}</div>
           <div class="popup-match-league">${match.league} • ${tgl}</div>
         </div>
+      </div>
       <div class="popup-match-info">
         ${isLive ? '<div class="popup-match-live">● LIVE</div>' : ''}
         <div class="popup-match-time">${match.kickoff_time}</div>
