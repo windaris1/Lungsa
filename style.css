@@ -33,26 +33,31 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 }
 
 .icon-btn {
-  background: rgba(255,255,255,0.1);
-border: none;
+  background: #1a1a1a;
+  border: 1px solid #333;
   color: #fff;
-  font-size: 26px;
+  width: 36px;  /* KASIH UKURAN FIX */
+  height: 36px; /* KASIH UKURAN FIX */
+  font-size: 18px;
   cursor: pointer;
-  padding: 3px 6px;
-  border-radius: 6px;
+  border-radius: 8px;
+  display: flex;          /* INI KUNCINYA */
+  align-items: center;    /* TENGAH VERTIKAL */
+  justify-content: center;/* TENGAH HORIZONTAL */
   line-height: 1;
   transition: all 0.2s;
+  padding: 0; /* HAPUS PADDING LAMA */
 }
 
 .icon-btn:hover {
-  background: rgba(255,255,255,0.1);
+  background: #252525;
+  border-color: #444;
 }
 
 .icon-btn:active {
   transform: rotate(180deg);
-  background: rgba(255,255,255,0.2);
+  background: #333;
 }
-
 .player-wrap { position: relative; background: #000; margin-bottom: 0; }
 .video-container { position: relative; padding-top: 56.25%; line-height: 0; }
 #playerFrame { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
