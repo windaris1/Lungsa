@@ -42,24 +42,9 @@ function filterActiveMatches() {
 }
 
 function renderLeagueBar() {
+  filterActiveMatches();
   leagueBar.innerHTML = '';
-  LEAGUES.forEach(sport => {
-    const item = document.createElement('div');
-    item.className = `league-item ${activeLeague === sport ? 'active' : ''}`;
-    item.onclick = () => selectLeague(sport);
-    
-    if (sport === 'LIVE') {
-      const count = MATCHES.filter(m => isMatchLive(m)).length;
-      item.innerHTML = `<span class="live-dot"></span>LIVE${count > 0 ? `<span class="league-count">${count}</span>` : ''}`;
-    } else {
-      const count = MATCHES.filter(m => m.sport === sport).length;
-      const icon = getSportIcon(sport);
-      item.innerHTML = `${icon}${sport}${count > 0 ? `<span class="league-count">${count}</span>` : ''}`;
-    }
-    
-    leagueBar.appendChild(item);
-  });
-}
+  const liveCount = MATCHES.filter(m => isMatchLive(m)).length;
   
   const liveBtn = document.createElement('div');
   liveBtn.className = 'league-item';
