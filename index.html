@@ -26,7 +26,6 @@
       sandbox="allow-scripts allow-same-origin allow-forms allow-presentation"
     ></iframe>
     
-   <!-- TAMBAHIN INI -->
     <div id="playerPoster" class="player-poster">
       <img src="https://sibaltv.pages.dev/sibco.jpg" alt="Sibal TV">
       <div>Pilih Pertandingan Dulu...</div>
@@ -38,136 +37,38 @@
   <div class="channel-select-bar" id="channelSelectBar" style="display:none;"></div>
 </div>
 
+<div class="league-bar-wrapper">
+  <button class="scroll-btn left" id="scrollLeft">‹</button>
+  <div class="league-bar" id="leagueBar"></div>
+  <button class="scroll-btn right" id="scrollRight">›</button>
+</div>
 
-  <div class="league-bar-wrapper">
-    <button class="scroll-btn left" id="scrollLeft">‹</button>
-    <div class="league-bar" id="leagueBar"></div>
-    <button class="scroll-btn right" id="scrollRight">›</button>
-  </div>
-
-  <div class="notice"><b>Download Aplikasi Sibal TV (Apk) Gratis</b><b><a href=""> KLIK DINISI </a></b></div>
-  
+<div class="notice"><b>Download Aplikasi Sibal TV (Apk) Gratis</b><b><a href=""> KLIK DINISI </a></b></div>
   
 <!-- Chat Box -->
 <div class="chat-wrapper">
   <div class="chat-box" id="chatBox"></div>
-  <div class="chat-input-area">
-    <input type="text" id="chat-name" placeholder="Nama" maxlength="12">
-    <input type="text" id="chat-msg" placeholder="Ketik pesan...">
-    <button id="chat-send">
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-  </svg>
-</button>
-<div>
+</div>
+
+<div class="match-popup-overlay" id="popupOverlay"></div>
+<div class="match-popup" id="matchPopup">
+  <div class="popup-header"><span id="popupTitle">Pilih Pertandingan</span><span id="popupClose">✕</span></div>
+  <div class="popup-list" id="popupList"></div>
+</div>
+
+<!-- INPUT CHAT PINDAH KE SINI - PALING BAWAH BODY -->
+<div class="chat-input-area">
+  <input type="text" id="chat-name" placeholder="Nama" maxlength="12">
+  <input type="text" id="chat-msg" placeholder="Ketik pesan...">
+  <button id="chat-send">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+    </svg>
+  </button>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-<script>
-  console.log('1. Firebase mulai init...');
-  
-  const firebaseConfig = {
-    apiKey: "AIzaSyDkZDZfkueidOiRB1hPBUSXhhBJICGj-C4",
-    authDomain: "sibaltv.firebaseapp.com",
-    databaseURL: "https://sibaltv-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "sibaltv",
-    storageBucket: "sibaltv.firebasestorage.app",
-    messagingSenderId: "625753841479",
-    appId: "1:625753841479:web:e6281e31fdcc5deddd3662"
-  };
-
-  const ADMIN_NAMES = ["Admin", "SibalTV"];
-  const USER_COLORS = ['#14b8a6', '#22c55e', '#eab308', '#ef4444', '#a855f7', '#ec4899', '#3b82f6', '#f97316'];
-
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database().ref('sibaltv_chat');
-  console.log('2. Firebase connect sukses');
-
-  const msgInput = document.getElementById('chat-msg');
-  const nameInput = document.getElementById('chat-name');
-  const sendBtn = document.getElementById('chat-send');
-  const chatBox = document.getElementById('chatBox');
-
-  if (!sendBtn) console.error('ERROR: Tombol #chat-send ga ketemu!');
-  if (!msgInput) console.error('ERROR: Input #chat-msg ga ketemu!');
-
-  nameInput.value = localStorage.getItem('chatName') || '';
-  nameInput.onchange = () => localStorage.setItem('chatName', nameInput.value);
-
-  function getUserColor(name) {
-    if (ADMIN_NAMES.includes(name)) return '#f59e0b';
-    let hash = 0;
-    for (let i = 0; i < name.length; i++) {
-      hash = name.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    return USER_COLORS[Math.abs(hash) % USER_COLORS.length];
-  }
-
- 
-function formatTime(timestamp) {
-  const date = new Date(timestamp);
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  return `${hours}.${minutes} WIB`;
-}
-
-db.limitToLast(50).on('child_added', (data) => {
-  const msg = data.val();
-  if (!msg || !msg.name || !msg.text) return;
-  
-  const isAdmin = ADMIN_NAMES.includes(msg.name);
-  const color = getUserColor(msg.name);
-  const initial = msg.name.charAt(0).toUpperCase();
-  const time = msg.time ? formatTime(msg.time) : '';
-  
-  const el = document.createElement('div');
-  el.className = 'chat-msg';
-  el.innerHTML = `
-    <div class="chat-avatar" style="background:${color}">${initial}</div>
-    <div class="chat-content">
-      <div class="chat-header">
-        <span class="chat-name" style="color:${color}">
-          ${isAdmin ? '⭐ ' : ''}${msg.name}
-        </span>
-        <span class="chat-time">${time}</span>
-      </div>
-      <div class="chat-text">${msg.text}</div>
-    </div>
-  `;
-
-chatBox.prepend(el); // prepend = masukin ke atas
-});
-
-  function sendChat() {
-    const name = nameInput.value.trim() || 'Anon';
-    const text = msgInput.value.trim();
-    console.log('4. Mencoba kirim:', name, text);
-    if (!text) return;
-    
-    db.push({
-      name: name,
-      text: text,
-      time: Date.now()
-    }).then(() => {
-      console.log('5. Kirim sukses');
-      msgInput.value = '';
-    }).catch((error) => {
-      console.error('GAGAL KIRIM:', error);
-      alert('Gagal kirim chat: ' + error.message);
-    });
-  }
-
-  sendBtn.onclick = sendChat;
-  msgInput.onkeydown = (e) => { if (e.key === 'Enter') sendChat(); };
-</script>
-
-  <div class="match-popup-overlay" id="popupOverlay"></div>
-  <div class="match-popup" id="matchPopup">
-    <div class="popup-header"><span id="popupTitle">Pilih Pertandingan</span><span id="popupClose">✕</span></div>
-    <div class="popup-list" id="popupList"></div>
-  </div>
-
-  <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
